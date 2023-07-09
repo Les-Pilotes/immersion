@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immersion/src/features/authentication/presentation/screens/welcome_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,11 +12,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Immersion',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Text("Immersion"),
+      home: const WelcomeScreen(),
     );
   }
 }
