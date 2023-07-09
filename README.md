@@ -4,7 +4,12 @@
 
 ## Description
 
-Ce projet vise à développer et améliorer l'application Les Pilotes, qui permet aux jeunes de découvrir le monde professionnel à travers des immersions en entreprise. L'objectif principal est de fournir une plateforme intuitive et personnalisée pour faciliter l'accès des jeunes à des expériences pratiques, les informer sur les choix d'orientation et de carrière, et les connecter avec des professionnels de l'industrie.
+Ce projet vise à développer et améliorer l'application Les Pilotes, 
+qui permet aux jeunes de découvrir le monde professionnel à travers 
+des immersions en entreprise. L'objectif principal est de fournir 
+une plateforme intuitive et personnalisée pour faciliter l'accès des 
+jeunes à des expériences pratiques, les informer sur les choix d'orientation 
+et de carrière, et les connecter avec des professionnels de l'industrie.
 
 ## Fonctionnalités
 
