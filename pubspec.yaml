@@ -95,3 +95,20 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flavorizr:
+  flavors:
+    prod:
+      app:
+        name: "Immersion"
+      android:
+        applicationId: "com.les.pilotes.immersion.immersion"
+      ios:
+        bundleId: "com.les.pilotes.immersion.immersion"
+    dev:
+      app:
+        name: "Immersion Dev"
+      android:
+        applicationId: "com.les.pilotes.immersion.immersion.dev"
+      ios:
+        bundleId: "com.les.pilotes.immersion.immersion.dev"

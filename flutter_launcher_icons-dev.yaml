@@ -1,0 +1,6 @@
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/app_dev_icon.png"
+  image_path_ios: "assets/logo/app_dev_icon_ios.png"
+  remove_alpha_ios: true
