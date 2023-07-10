@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../flavors.dart';
+import 'package:immersion/flavors.dart';
 
 class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

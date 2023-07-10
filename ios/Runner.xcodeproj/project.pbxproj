@@ -20,6 +20,7 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		9DD327F3F3FBBD36493735BC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 266E3D53D91A427628B6539B /* GoogleService-Info.plist */; };
 		B871F30E12862E181634337D /* prodLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEC410220C24924F4F701861 /* prodLaunchScreen.storyboard */; };
 		F3A6CE1B233B2D87367F9BF3 /* devProfile.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1AE45DC6308C504BEA1585F5 /* devProfile.xcconfig */; };
 /* End PBXBuildFile section */
@@ -51,6 +52,7 @@
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		1AE45DC6308C504BEA1585F5 /* devProfile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = devProfile.xcconfig; path = Flutter/devProfile.xcconfig; sourceTree = "<group>"; };
+		266E3D53D91A427628B6539B /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				CEC410220C24924F4F701861 /* prodLaunchScreen.storyboard */,
 				A8E53A06806B496BBB6FFD3B /* devLaunchScreen.storyboard */,
+				266E3D53D91A427628B6539B /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -247,6 +250,7 @@
 				0D490C941B43D5F840BDB05D /* devRelease.xcconfig in Resources */,
 				B871F30E12862E181634337D /* prodLaunchScreen.storyboard in Resources */,
 				5A3207A162848760EAC47030 /* devLaunchScreen.storyboard in Resources */,
+				9DD327F3F3FBBD36493735BC /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
