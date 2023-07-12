@@ -8,18 +8,20 @@ class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
   void navigateToSignIn(BuildContext context) {
-    Navigator.of(context).push(
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute<SignInScreen>(
         builder: (context) => const SignInScreen(),
       ),
+            (route) => false,
     );
   }
 
   void navigateToSignUp(BuildContext context) {
-    Navigator.of(context).push(
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute<SignUpRegistrationScreen>(
         builder: (context) => const SignUpRegistrationScreen(),
       ),
+            (route) => false,
     );
   }
 

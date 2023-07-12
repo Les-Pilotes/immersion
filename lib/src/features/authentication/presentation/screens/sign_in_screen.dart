@@ -12,15 +12,16 @@ class SignInScreen extends StatelessWidget {
   static const String routeName = "/signIn";
 
   void navigateToHome(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      HomeNavigationScreen.routeName,
-          (route) => false,
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute<SignUpRegistrationScreen>(
+        builder: (context) => const HomeNavigationScreen(),
+      ),
+      (route) => false,
     );
   }
 
   void navigateToSignUp(BuildContext context) {
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute<SignUpRegistrationScreen>(
         builder: (context) => const SignUpRegistrationScreen(),
       ),
