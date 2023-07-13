@@ -7,6 +7,8 @@ import 'package:immersion/src/utils/ui_library/button/secondary_button.dart';
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
+  static const String routeName = "/";
+
   void navigateToSignIn(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute<SignInScreen>(

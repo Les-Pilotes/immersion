@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:immersion/src/features/assistant/presentation/screen/assistant_discussion_chat_screen.dart';
 import 'package:immersion/src/features/home/presentation/home_screen.dart';
 import 'package:immersion/src/features/user/presentation/screen/profile_screen.dart';
 

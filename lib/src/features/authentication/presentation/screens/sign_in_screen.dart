@@ -6,10 +6,36 @@ import 'package:immersion/src/utils/ui_library/text/pilotes_input_field.dart';
 import 'package:immersion/src/utils/ui_library/text/primary_page_title.dart';
 import 'package:immersion/src/utils/ui_library/text/suggestion_subtitle.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
   static const String routeName = "/signIn";
+
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+  final _focusEmail = FocusNode();
+  final _focusPassword = FocusNode();
+  bool _isProcessing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   void navigateToHome(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
@@ -53,16 +79,23 @@ class SignInScreen extends StatelessWidget {
                     Container(
                       height: 79,
                     ),
-                    const PilotesInputField(
+                    PilotesInputField(
                       fieldHintText: "Adresse mail",
-                      fieldIcon: Icon(Icons.info_outline_rounded),
+                      fieldIcon: const Icon(Icons.info_outline_rounded),
+                      controller: _emailController,
+                      currentNode: _focusEmail,
+                      nextNode: _focusPassword,
+                      fieldActionType: TextInputAction.next,
                     ),
                     Container(
                       height: 24,
                     ),
-                    const PilotesInputField(
+                    PilotesInputField(
                       fieldHintText: "Mot de passe",
-                      fieldIcon: Icon(Icons.info_outline_rounded),
+                      fieldIcon: const Icon(Icons.info_outline_rounded),
+                      controller: _passwordController,
+                      currentNode: _focusPassword,
+                      fieldActionType: TextInputAction.done,
                     ),
                   ],
                 ),
