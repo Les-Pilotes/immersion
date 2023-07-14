@@ -48,4 +48,28 @@ class StudentUser {
   }
 
   String get fullName => "$firstName $lastName";
+
+  StudentUser copyWith({
+    String? id,
+    String? lastName,
+    String? firstName,
+    String? email,
+    String? bio,
+    Gender? gender,
+    SchoolLevel? schoolLevel,
+    String? profileImageUrl,
+    DateTime? dateOfBirth,
+    List<String>? devices,
+    List<Preferences>? preferences,
+    List<Event>? favoriteEvents,
+    List<Event>? participationEvents,
+    DateTime? createdDate,
+  }) {
+    return StudentUser(
+      id: id ?? this.id,
+      lastName: lastName ?? this.lastName,
+      firstName: firstName ?? this.firstName,
+      email: email ?? this.email,
+    );
+  }
 }

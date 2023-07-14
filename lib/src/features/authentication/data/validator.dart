@@ -1,41 +1,32 @@
+import 'package:email_validator/email_validator.dart';
+
 class Validator {
   static String? validateName({required String? name}) {
-    if (name == null) {
-      return null;
-    }
-
-    if (name.isEmpty) {
-      return "Name can't be empty";
+    if (name == null || name.isEmpty) {
+      return "Le champ ne peut pas être vide";
     }
     return null;
   }
 
   static String? validateEmail({required String? email}) {
-    if (email == null) {
-      return null;
+    if (email == null || email.isEmpty) {
+      return "L'email ne peut pas être vide";
     }
 
-    final emailRegExp = RegExp(
-      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$",
-    );
-    if (email.isEmpty) {
-      return "Email can't be empty";
-    } else if (!emailRegExp.hasMatch(email)) {
-      return 'Enter a correct email';
+    if (!EmailValidator.validate(email)) {
+      return 'Veuillez entrer une adresse email valide';
     }
 
     return null;
   }
 
   static String? validatePassword({required String? password}) {
-    if (password == null) {
-      return null;
+    if (password == null || password.isEmpty) {
+      return "Le mot de passe ne peut pas être vide";
     }
 
-    if (password.isEmpty) {
-      return "Password can't be empty";
-    } else if (password.length < 6) {
-      return 'Enter a password with length at least 6';
+    if (password.length < 6) {
+      return "Veuillez entrer un mot de passe d'au moins 6 caractères";
     }
 
     return null;

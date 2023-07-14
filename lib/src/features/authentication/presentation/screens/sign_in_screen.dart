@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_registration.dart';
 import 'package:immersion/src/features/home/presentation/home_navigation_screen.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
@@ -81,21 +82,32 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     PilotesInputField(
                       fieldHintText: "Adresse mail",
+                      fieldName: 'email',
                       fieldIcon: const Icon(Icons.info_outline_rounded),
                       controller: _emailController,
                       currentNode: _focusEmail,
                       nextNode: _focusPassword,
                       fieldActionType: TextInputAction.next,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.email(),
+                      ]),
                     ),
                     Container(
                       height: 24,
                     ),
                     PilotesInputField(
                       fieldHintText: "Mot de passe",
+                      fieldName: 'password',
                       fieldIcon: const Icon(Icons.info_outline_rounded),
                       controller: _passwordController,
                       currentNode: _focusPassword,
+                      passwordField: true,
                       fieldActionType: TextInputAction.done,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.minLength(6),
+                      ]),
                     ),
                   ],
                 ),

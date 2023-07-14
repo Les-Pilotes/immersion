@@ -112,6 +112,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                     ),
                     PilotesInputField(
                       fieldHintText: "Date de naissance",
+                      fieldName: 'dob',
                       fieldIcon: const Icon(Icons.calendar_month_rounded),
                       controller: _passwordController,
                       currentNode: _focusPassword,
