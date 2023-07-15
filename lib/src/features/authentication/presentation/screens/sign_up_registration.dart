@@ -97,55 +97,55 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                     vertical: 16,
                     horizontal: 32,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          PrimaryPageTitle(
-                            title: "Inscription",
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                NumberCircle(
-                                  child: "1", // or Icons.check
-                                  backgroundColor: darkColor,
-                                  textColor: Colors.white,
-                                  radius: 14,
-                                ),
-                                SizedBox(width: 5),
-                                NumberCircle(
-                                  child: "2",
-                                  backgroundColor: Colors.white,
-                                  textColor: darkColor,
-                                  radius: 14,
-                                ),
-                                SizedBox(width: 5),
-                                NumberCircle(
-                                  child: "3",
-                                  backgroundColor: Colors.white,
-                                  textColor: darkColor,
-                                  radius: 14,
-                                ),
-                              ],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            PrimaryPageTitle(
+                              title: "Inscription",
                             ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        height: 22,
-                      ),
-                      const Text("Créé ton compte"),
-                      Container(
-                        height: 40,
-                      ),
-                      Form(
-                        key: _formKey,
-                        child: SingleChildScrollView(
+                            Expanded(
+                              flex: 1,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  NumberCircle(
+                                    child: "1", // or Icons.check
+                                    backgroundColor: darkColor,
+                                    textColor: Colors.white,
+                                    radius: 14,
+                                  ),
+                                  SizedBox(width: 5),
+                                  NumberCircle(
+                                    child: "2",
+                                    backgroundColor: Colors.white,
+                                    textColor: darkColor,
+                                    radius: 14,
+                                  ),
+                                  SizedBox(width: 5),
+                                  NumberCircle(
+                                    child: "3",
+                                    backgroundColor: Colors.white,
+                                    textColor: darkColor,
+                                    radius: 14,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          height: 22,
+                        ),
+                        const Text("Créé ton compte"),
+                        Container(
+                          height: 40,
+                        ),
+                        Form(
+                          key: _formKey,
                           child: Column(
                             children: [
                               PilotesInputField(
@@ -231,8 +231,8 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                             ],
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

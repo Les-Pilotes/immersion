@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:immersion/src/features/authentication/domain/gender.dart';
 import 'package:immersion/src/features/authentication/domain/school_level.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_preferences.dart';
@@ -72,6 +71,9 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Gender? selectedGender;
+    SchoolLevel? selectedSchoolLevel;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -82,125 +84,206 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                   vertical: 8,
                   horizontal: 24,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                          color: primaryColor,
-                          onPressed: () => Navigator.pop(context),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              icon:
+                                  const Icon(Icons.arrow_back_ios_new_rounded),
+                              color: primaryColor,
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            const PrimaryPageTitle(
+                              title: "Informations",
+                            ),
+                            const Expanded(
+                              flex: 1,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  NumberCircle(
+                                    child: Icons.check,
+                                    backgroundColor: Colors.white,
+                                    textColor: darkColor,
+                                    radius: 14,
+                                  ),
+                                  SizedBox(width: 5),
+                                  NumberCircle(
+                                    child: "2",
+                                    backgroundColor: darkColor,
+                                    textColor: Colors.white,
+                                    radius: 14,
+                                  ),
+                                  SizedBox(width: 5),
+                                  NumberCircle(
+                                    child: "3",
+                                    backgroundColor: Colors.white,
+                                    textColor: darkColor,
+                                    radius: 14,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        const PrimaryPageTitle(
-                          title: "Informations",
+                        Container(
+                          height: 22,
                         ),
-                        const Expanded(
-                          flex: 1,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              NumberCircle(
-                                child: Icons.check,
-                                backgroundColor: Colors.white,
-                                textColor: darkColor,
-                                radius: 14,
-                              ),
-                              SizedBox(width: 5),
-                              NumberCircle(
-                                child: "2",
-                                backgroundColor: darkColor,
-                                textColor: Colors.white,
-                                radius: 14,
-                              ),
-                              SizedBox(width: 5),
-                              NumberCircle(
-                                child: "3",
-                                backgroundColor: Colors.white,
-                                textColor: darkColor,
-                                radius: 14,
-                              ),
-                            ],
+                        const Text("Entrez vos informations"),
+                        Container(
+                          height: 40,
+                        ),
+                        GestureDetector(
+                          onTap: () => _selectDate(context),
+                          child: AbsorbPointer(
+                            child: PilotesInputField(
+                              fieldHintText: "Date de naissance",
+                              fieldName: 'dob',
+                              fieldIcon:
+                                  const Icon(Icons.calendar_month_rounded),
+                              controller: _dobController,
+                              currentNode: _focusDob,
+                              fieldActionType: TextInputAction.next,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Entrez une date de naissance';
+                                }
+                                return null;
+                              },
+                            ),
                           ),
+                        ),
+                        Container(
+                          height: 24,
+                        ),
+                        const Text("Je suis un.e"),
+                        StatefulBuilder(
+                          builder:
+                              (BuildContext context, StateSetter setState) {
+                            return Column(
+                              children: [
+                                RadioListTile<Gender>(
+                                  title: const Text('Garçon'),
+                                  value: Gender.male,
+                                  groupValue: selectedGender,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedGender = value;
+                                    });
+                                  },
+                                ),
+                                RadioListTile<Gender>(
+                                  title: const Text('Fille'),
+                                  value: Gender.female,
+                                  groupValue: selectedGender,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedGender = value;
+                                    });
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        const Text("Niveau scolaire"),
+                        StatefulBuilder(
+                          builder:
+                              (BuildContext context, StateSetter setState) {
+                            return Column(
+                              children: [
+                                RadioListTile<SchoolLevel>(
+                                  title: const Text('Collège'),
+                                  value: SchoolLevel.college,
+                                  groupValue: selectedSchoolLevel,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedSchoolLevel = value;
+                                    });
+                                  },
+                                ),
+                                RadioListTile<SchoolLevel>(
+                                  title: const Text('Lycée'),
+                                  value: SchoolLevel.highSchool,
+                                  groupValue: selectedSchoolLevel,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedSchoolLevel = value;
+                                    });
+                                  },
+                                ),
+                                RadioListTile<SchoolLevel>(
+                                  title: const Text('Études supérieures'),
+                                  value: SchoolLevel.higherEducation,
+                                  groupValue: selectedSchoolLevel,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedSchoolLevel = value;
+                                    });
+                                  },
+                                ),
+                                RadioListTile<SchoolLevel>(
+                                  title: const Text('Autres'),
+                                  value: SchoolLevel.other,
+                                  groupValue: selectedSchoolLevel,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedSchoolLevel = value;
+                                    });
+                                  },
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ],
                     ),
-                    Container(
-                      height: 22,
-                    ),
-                    const Text("Entrez vos informations"),
-                    Container(
-                      height: 40,
-                    ),
-                    GestureDetector(
-                      onTap: () => _selectDate(context),
-                      child: AbsorbPointer(
-                        child: PilotesInputField(
-                          fieldHintText: "Date de naissance",
-                          fieldName: 'dob',
-                          fieldIcon: const Icon(Icons.calendar_month_rounded),
-                          controller: _dobController,
-                          currentNode: _focusDob,
-                          fieldActionType: TextInputAction.next,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 24,
-                    ),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          FormBuilderRadioGroup(
-                            decoration: const InputDecoration(
-                                labelText: 'Je suis un.e'),
-                            name: 'gender',
-                            validator: FormBuilderValidators.required(),
-                            options: Gender.values
-                                .map(
-                                  (gender) => FormBuilderFieldOption(
-                                      value: gender.name),
-                                )
-                                .toList(growable: false),
-                          ),
-                          FormBuilderRadioGroup(
-                            decoration: const InputDecoration(
-                                labelText: 'Niveau scolaire'),
-                            name: 'schoolLevel',
-                            validator: FormBuilderValidators.required(),
-                            options: SchoolLevel.values
-                                .map(
-                                  (level) =>
-                                      FormBuilderFieldOption(value: level.name),
-                                )
-                                .toList(growable: false),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
             Column(
               children: [
-                //amadou_g@hotmail.fr
                 PrimaryButton(
                   text: "Suivant",
                   onPressed: () {
-                    if (_formKey.currentState?.validate() == false) {
-                      if (_dobController.text.isNotEmpty) {
-                        navigateToSignUpPreference(context);
+                    if (_dobController.text.isNotEmpty) {
+                      if (selectedGender != null) {
+                        if (selectedSchoolLevel != null) {
+                          navigateToSignUpPreference(context);
+                        } else {
+                          showDialog<AlertDialog>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Informations'),
+                                content: const Text('Choississez un niveau'),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
                       } else {
                         showDialog<AlertDialog>(
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: const Text('Date de naissance'),
-                              content:
-                                  const Text('Entrez une date de naissance'),
+                              title: const Text('Informations'),
+                              content: const Text('Choississez une option'),
                               actions: [
                                 TextButton(
                                   child: const Text('OK'),
@@ -219,8 +302,8 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('Informations'),
-                            content: const Text('Choississez une option'),
+                            title: const Text('Date de naissance'),
+                            content: const Text('Entrez une date de naissance'),
                             actions: [
                               TextButton(
                                 child: const Text('OK'),
