@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:immersion/src/features/authentication/domain/student_preferences.dart';
 import 'package:immersion/src/features/home/presentation/home_navigation_screen.dart';
 import 'package:immersion/src/utils/styles.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
-import 'package:immersion/src/utils/ui_library/list/multiple_choice_list.dart';
 import 'package:immersion/src/utils/ui_library/misc/number_circle.dart';
 import 'package:immersion/src/utils/ui_library/text/primary_page_title.dart';
 
-class SignUpPreferenceScreen extends StatelessWidget {
+class SignUpPreferenceScreen extends StatefulWidget {
   const SignUpPreferenceScreen({super.key});
 
-  //static const String routeName = "/signUp/information/preference";
+  @override
+  State<SignUpPreferenceScreen> createState() => _SignUpPreferenceScreenState();
+}
 
+class _SignUpPreferenceScreenState extends State<SignUpPreferenceScreen> {
+  //static const String routeName = "/signUp/information/preference";
   void navigateToHome(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(
       context,
@@ -21,6 +25,10 @@ class SignUpPreferenceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> selectedItems = [];
+
+    const List<Preferences> preferences = Preferences.values;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -84,7 +92,36 @@ class SignUpPreferenceScreen extends StatelessWidget {
                     Container(
                       height: 40,
                     ),
-                    const Expanded(child: MultipleChoiceList()),
+                    Expanded(
+                      child:
+
+                      StatefulBuilder(
+                        builder:
+                        (BuildContext context, StateSetter setState) {
+                          return ListView.builder(
+                            itemCount: preferences.length,
+                            itemBuilder: (context, index) {
+                              final item = preferences[index];
+                              final bool isSelected =
+                              selectedItems.contains(item.name);
+
+                              return CheckboxListTile(
+                                title: Text(item.name),
+                                value: isSelected,
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (value != null && value) {
+                                      selectedItems.add(item.name);
+                                    } else {
+                                      selectedItems.remove(item.name);
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          );
+                        },),
+                    ),
                   ],
                 ),
               ),
@@ -93,7 +130,30 @@ class SignUpPreferenceScreen extends StatelessWidget {
               children: [
                 PrimaryButton(
                   text: "S'inscrire",
-                  onPressed: () => navigateToHome(context),
+                  onPressed: () {
+                    if (selectedItems.isNotEmpty) {
+                      navigateToHome(context);
+                    } else {
+                      showDialog<AlertDialog>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Préféremces'),
+                            content: const Text('Choississez au moins 1 option'),
+                            actions: [
+                              TextButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
                 const SizedBox(height: 40),
               ],
