@@ -13,11 +13,11 @@ class StudentUser {
     required this.email,
   });
 
-  factory StudentUser.fromFirebaseUser(User firebaseUser) {
+  factory StudentUser.fromFirebaseUser(User firebaseUser, String firstName, String lastName) {
     return StudentUser(
       id: firebaseUser.uid,
-      firstName: firebaseUser.displayName ?? '',
-      lastName: firebaseUser.displayName ?? '',
+      firstName: firstName ?? '',
+      lastName: lastName ?? '',
       email: firebaseUser.email ?? '',
     );
   }

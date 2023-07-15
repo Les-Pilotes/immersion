@@ -56,7 +56,7 @@ class CurrentUserCubit extends Cubit<StudentUser> {
     );
 
     if (firebaseUser != null) {
-      final updatedUser = StudentUser.fromFirebaseUser(firebaseUser);
+      final updatedUser = StudentUser.fromFirebaseUser(firebaseUser, state.firstName, state.lastName);
 
       final userRef = FirebaseInstances.firebaseFirestoreInstance
           .collection(FirebasePaths.USER_PATH)
@@ -103,7 +103,7 @@ class CurrentUserCubit extends Cubit<StudentUser> {
 
     final User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      emit(StudentUser.fromFirebaseUser(user));
+      //emit(StudentUser.fromFirebaseUser(user));
     }
   }
 }
