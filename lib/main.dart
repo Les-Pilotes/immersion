@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
-import 'package:immersion/firebase_options.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/welcome_screen.dart';
 import 'package:immersion/src/features/home/presentation/home_navigation_screen.dart';
 
@@ -10,6 +10,14 @@ FutureOr<void> main() async {
 
   runApp(
     MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('fr', 'FR'),
+      ],
       title: 'Immersion',
       debugShowCheckedModeBanner: false,
       initialRoute: WelcomeScreen.routeName,

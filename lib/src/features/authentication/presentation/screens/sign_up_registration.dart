@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_informations.dart';
@@ -21,6 +20,7 @@ class SignUpRegistrationScreen extends StatefulWidget {
 }
 
 class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
+  //region Variables
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _firstNameController;
   late final TextEditingController _lastNameController;
@@ -33,8 +33,9 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
   final _focusPassword = FocusNode();
   final _focusConfPassword = FocusNode();
 
-  //bool _isProcessing = false;
+  //endregion
 
+  //region Override Methods
   @override
   void initState() {
     super.initState();
@@ -55,8 +56,9 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
     super.dispose();
   }
 
-  void inputFieldCheck() {}
+  //endregion
 
+  //region Navigation
   void navigateToSignIn(BuildContext context) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<SignInScreen>(
@@ -72,6 +74,8 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
       ),
     );
   }
+
+  //endregion
 
   @override
   Widget build(BuildContext context) {
@@ -215,9 +219,8 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                                 validator: FormBuilderValidators.compose(
                                   [
                                     FormBuilderValidators.required(),
-                                        (val) {
-                                      if (val !=
-                                          _passwordController.text) {
+                                    (val) {
+                                      if (val != _passwordController.text) {
                                         return 'Les mots de passe ne correspondent pas';
                                       }
                                       return null;
