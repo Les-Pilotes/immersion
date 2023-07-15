@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
 import 'package:immersion/src/features/authentication/domain/student_preferences.dart';
 import 'package:immersion/src/features/home/presentation/home_navigation_screen.dart';
 import 'package:immersion/src/utils/styles.dart';
@@ -7,14 +9,37 @@ import 'package:immersion/src/utils/ui_library/misc/number_circle.dart';
 import 'package:immersion/src/utils/ui_library/text/primary_page_title.dart';
 
 class SignUpPreferenceScreen extends StatefulWidget {
-  const SignUpPreferenceScreen({super.key});
+  const SignUpPreferenceScreen({
+    required this.password,
+    super.key,
+  });
+
+  final String password;
 
   @override
   State<SignUpPreferenceScreen> createState() => _SignUpPreferenceScreenState();
 }
 
 class _SignUpPreferenceScreenState extends State<SignUpPreferenceScreen> {
-  //static const String routeName = "/signUp/information/preference";
+  final List<String> selectedItems = [];
+
+  List<Preferences> preferences = Preferences.values;
+
+  //region State
+  void addUserPreferences(BuildContext context) {
+    context.read<CurrentUserCubit>().addPreferences(
+          preferences,
+        );
+  }
+
+  void registerUser(BuildContext context) {
+    context.read<CurrentUserCubit>().signUpUser(
+          widget.password,
+        );
+  }
+
+  //endregion
+
   void navigateToHome(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(
       context,
@@ -25,10 +50,6 @@ class _SignUpPreferenceScreenState extends State<SignUpPreferenceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> selectedItems = [];
-
-    const List<Preferences> preferences = Preferences.values;
-
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -93,17 +114,14 @@ class _SignUpPreferenceScreenState extends State<SignUpPreferenceScreen> {
                       height: 40,
                     ),
                     Expanded(
-                      child:
-
-                      StatefulBuilder(
-                        builder:
-                        (BuildContext context, StateSetter setState) {
+                      child: StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
                           return ListView.builder(
                             itemCount: preferences.length,
                             itemBuilder: (context, index) {
                               final item = preferences[index];
                               final bool isSelected =
-                              selectedItems.contains(item.name);
+                                  selectedItems.contains(item.name);
 
                               return CheckboxListTile(
                                 title: Text(item.name),
@@ -120,7 +138,8 @@ class _SignUpPreferenceScreenState extends State<SignUpPreferenceScreen> {
                               );
                             },
                           );
-                        },),
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -132,6 +151,9 @@ class _SignUpPreferenceScreenState extends State<SignUpPreferenceScreen> {
                   text: "S'inscrire",
                   onPressed: () {
                     if (selectedItems.isNotEmpty) {
+                      addUserPreferences(context);
+                      registerUser(context);
+                      // TODO(amadoug2g): check that the user does not already exists in DB
                       navigateToHome(context);
                     } else {
                       showDialog<AlertDialog>(
@@ -139,7 +161,8 @@ class _SignUpPreferenceScreenState extends State<SignUpPreferenceScreen> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: const Text('Préféremces'),
-                            content: const Text('Choississez au moins 1 option'),
+                            content:
+                                const Text('Choississez au moins 1 option'),
                             actions: [
                               TextButton(
                                 child: const Text('OK'),

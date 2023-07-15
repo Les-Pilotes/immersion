@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:immersion/src/features/authentication/domain/gender.dart';
 import 'package:immersion/src/features/authentication/domain/school_level.dart';
@@ -21,6 +22,17 @@ class StudentUser {
     );
   }
 
+  factory StudentUser.fromSnapshot(DocumentSnapshot snapshot) {
+    final data = snapshot.data()! as Map<String, dynamic>;
+    return StudentUser(
+      id: data['id'] as String,
+      firstName: data['firstName'] as String,
+      lastName: data['lastName'] as String,
+      email: data['email'] as String,
+    );
+  }
+
+
   late final String id;
   String firstName;
   String lastName;
@@ -42,6 +54,10 @@ class StudentUser {
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
+      'dateOfBirth': dateOfBirth,
+      'gender': gender,
+      'schoolLevel': schoolLevel,
+      'preferences': preferences,
       //'devices': devices,
       'createdDate': createdDate,
     };

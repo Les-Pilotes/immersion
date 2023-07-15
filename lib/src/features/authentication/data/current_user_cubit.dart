@@ -47,41 +47,43 @@ class CurrentUserCubit extends Cubit<StudentUser> {
     emit(updatedUser);
   }
 
-  Future<void> signUpUser(StudentUser user, String password) async {
-    // Perform the registration logic, e.g., create a user in Firebase Authentication
-    // Once the registration is successful, you can update the user details in the cubit
-
-    await FirebaseRegistrationHelper
+  Future<void> signUpUser(String password) async {
+    final firebaseUser = await FirebaseRegistrationHelper
         .registerUsingEmailPassword(
-      name: user.fullName,
-      email: user.email,
+      name: state.fullName,
+      email: state.email,
       password: password,
     );
 
-    final userRef = FirebaseInstances.firebaseFirestoreInstance
-        .collection(FirebasePaths.USER_PATH)
-        .doc(user.id);
-    await userRef.set(user.toMap());
+    if (firebaseUser != null) {
+      final updatedUser = StudentUser.fromFirebaseUser(firebaseUser);
 
-    emit(user);
+      final userRef = FirebaseInstances.firebaseFirestoreInstance
+          .collection(FirebasePaths.USER_PATH)
+          .doc(updatedUser.id);
+      await userRef.set(updatedUser.toMap());
+
+      emit(updatedUser);
+    }
   }
 
-  Future<void> signInUser(StudentUser user, String password) async {
-    // Perform the registration logic, e.g., create a user in Firebase Authentication
-    // Once the registration is successful, you can update the user details in the cubit
-
-    await FirebaseRegistrationHelper
-        .signInUsingEmailPassword(
-      email: user.email,
+  Future<void> signInUser(String email, String password) async {
+    final firebaseUser = await FirebaseRegistrationHelper.signInUsingEmailPassword(
+      email: email,
       password: password,
     );
 
-    final userRef = FirebaseInstances.firebaseFirestoreInstance
-        .collection(FirebasePaths.USER_PATH)
-        .doc(user.id);
-    await userRef.set(user.toMap());
+    if (firebaseUser != null) {
+      final userRef = FirebaseInstances.firebaseFirestoreInstance
+          .collection(FirebasePaths.USER_PATH)
+          .doc(firebaseUser.uid);
 
-    emit(user);
+      final userSnapshot = await userRef.get();
+      if (userSnapshot.exists) {
+        final user = StudentUser.fromSnapshot(userSnapshot);
+        emit(user);
+      }
+    }
   }
 
   Future<void> updateUser(StudentUser user) async {

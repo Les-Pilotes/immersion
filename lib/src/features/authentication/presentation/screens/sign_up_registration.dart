@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
+import 'package:immersion/src/features/authentication/domain/user_model.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_informations.dart';
 import 'package:immersion/src/utils/styles.dart';
@@ -58,6 +61,18 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
 
   //endregion
 
+  //region State
+  void initializeUser(BuildContext context) {
+    context.read<CurrentUserCubit>().initiateUser(
+          "",
+          _firstNameController.text,
+          _lastNameController.text,
+          _emailController.text,
+        );
+  }
+
+  //endregion
+
   //region Navigation
   void navigateToSignIn(BuildContext context) {
     Navigator.of(context).pushReplacement(
@@ -67,10 +82,10 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
     );
   }
 
-  void navigateToSignUpInformation(BuildContext context) {
+  void navigateToSignUpInformation(BuildContext context, String password) {
     Navigator.of(context).push(
       MaterialPageRoute<SignUpInformationScreen>(
-        builder: (context) => const SignUpInformationScreen(),
+        builder: (context) => SignUpInformationScreen(password: password),
       ),
     );
   }
@@ -144,92 +159,96 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                         Container(
                           height: 40,
                         ),
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              PilotesInputField(
-                                fieldHintText: "Prénom",
-                                fieldName: 'firstName',
-                                controller: _firstNameController,
-                                currentNode: _focusFirstName,
-                                nextNode: _focusLastName,
-                                fieldActionType: TextInputAction.next,
-                                validator: FormBuilderValidators.required(),
+                        BlocBuilder<CurrentUserCubit, StudentUser>(
+                          builder: (context, currentUser) {
+                            return Form(
+                              key: _formKey,
+                              child: Column(
+                                children: [
+                                  PilotesInputField(
+                                    fieldHintText: "Prénom",
+                                    fieldName: 'firstName',
+                                    controller: _firstNameController,
+                                    currentNode: _focusFirstName,
+                                    nextNode: _focusLastName,
+                                    fieldActionType: TextInputAction.next,
+                                    validator: FormBuilderValidators.required(),
+                                  ),
+                                  Container(
+                                    height: 24,
+                                  ),
+                                  PilotesInputField(
+                                    fieldHintText: "Nom",
+                                    fieldName: 'lastName',
+                                    controller: _lastNameController,
+                                    currentNode: _focusLastName,
+                                    nextNode: _focusEmail,
+                                    fieldActionType: TextInputAction.next,
+                                    validator: FormBuilderValidators.required(),
+                                  ),
+                                  Container(
+                                    height: 22,
+                                  ),
+                                  PilotesInputField(
+                                    fieldHintText: "Adresse mail",
+                                    fieldName: 'email',
+                                    fieldIcon:
+                                        const Icon(Icons.info_outline_rounded),
+                                    controller: _emailController,
+                                    currentNode: _focusEmail,
+                                    nextNode: _focusPassword,
+                                    fieldActionType: TextInputAction.next,
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                      FormBuilderValidators.email(),
+                                    ]),
+                                  ),
+                                  Container(
+                                    height: 24,
+                                  ),
+                                  PilotesInputField(
+                                    fieldHintText: "Mot de passe",
+                                    fieldName: "password",
+                                    fieldIcon: const Icon(
+                                        Icons.remove_red_eye_rounded),
+                                    controller: _passwordController,
+                                    currentNode: _focusPassword,
+                                    nextNode: _focusConfPassword,
+                                    passwordField: true,
+                                    fieldActionType: TextInputAction.next,
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                      FormBuilderValidators.minLength(6),
+                                    ]),
+                                  ),
+                                  Container(
+                                    height: 24,
+                                  ),
+                                  PilotesInputField(
+                                    fieldHintText: "Confirmation mot de passe",
+                                    fieldName: 'confirmPassword',
+                                    fieldIcon: const Icon(
+                                        Icons.remove_red_eye_rounded),
+                                    controller: _passwordConfController,
+                                    currentNode: _focusConfPassword,
+                                    passwordField: true,
+                                    fieldActionType: TextInputAction.done,
+                                    validator: FormBuilderValidators.compose(
+                                      [
+                                        FormBuilderValidators.required(),
+                                        (val) {
+                                          if (val != _passwordController.text) {
+                                            return 'Les mots de passe ne correspondent pas';
+                                          }
+                                          return null;
+                                        },
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Container(
-                                height: 24,
-                              ),
-                              PilotesInputField(
-                                fieldHintText: "Nom",
-                                fieldName: 'lastName',
-                                controller: _lastNameController,
-                                currentNode: _focusLastName,
-                                nextNode: _focusEmail,
-                                fieldActionType: TextInputAction.next,
-                                validator: FormBuilderValidators.required(),
-                              ),
-                              Container(
-                                height: 22,
-                              ),
-                              PilotesInputField(
-                                fieldHintText: "Adresse mail",
-                                fieldName: 'email',
-                                fieldIcon:
-                                    const Icon(Icons.info_outline_rounded),
-                                controller: _emailController,
-                                currentNode: _focusEmail,
-                                nextNode: _focusPassword,
-                                fieldActionType: TextInputAction.next,
-                                validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(),
-                                  FormBuilderValidators.email(),
-                                ]),
-                              ),
-                              Container(
-                                height: 24,
-                              ),
-                              PilotesInputField(
-                                fieldHintText: "Mot de passe",
-                                fieldName: "password",
-                                fieldIcon:
-                                    const Icon(Icons.remove_red_eye_rounded),
-                                controller: _passwordController,
-                                currentNode: _focusPassword,
-                                nextNode: _focusConfPassword,
-                                passwordField: true,
-                                fieldActionType: TextInputAction.next,
-                                validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(),
-                                  FormBuilderValidators.minLength(6),
-                                ]),
-                              ),
-                              Container(
-                                height: 24,
-                              ),
-                              PilotesInputField(
-                                fieldHintText: "Confirmation mot de passe",
-                                fieldName: 'confirmPassword',
-                                fieldIcon:
-                                    const Icon(Icons.remove_red_eye_rounded),
-                                controller: _passwordConfController,
-                                currentNode: _focusConfPassword,
-                                passwordField: true,
-                                fieldActionType: TextInputAction.done,
-                                validator: FormBuilderValidators.compose(
-                                  [
-                                    FormBuilderValidators.required(),
-                                    (val) {
-                                      if (val != _passwordController.text) {
-                                        return 'Les mots de passe ne correspondent pas';
-                                      }
-                                      return null;
-                                    },
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -242,7 +261,9 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                     text: 'Suivant',
                     onPressed: () {
                       if (_formKey.currentState?.validate() ?? false) {
-                        navigateToSignUpInformation(context);
+                        initializeUser(context);
+                        navigateToSignUpInformation(
+                            context, _passwordController.text);
                       }
                     },
                   ),

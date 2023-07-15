@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
 import 'package:immersion/src/features/authentication/domain/gender.dart';
 import 'package:immersion/src/features/authentication/domain/school_level.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_preferences.dart';
@@ -11,7 +13,12 @@ import 'package:immersion/src/utils/ui_library/text/primary_page_title.dart';
 import 'package:intl/intl.dart';
 
 class SignUpInformationScreen extends StatefulWidget {
-  const SignUpInformationScreen({super.key});
+  const SignUpInformationScreen({
+    required this.password,
+    super.key,
+  });
+
+  final String password;
 
   static const String routeName = "/signUp/information";
 
@@ -25,6 +32,9 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   late final TextEditingController _dobController;
   final _focusDob = FocusNode();
+  late DateTime _selectedDOB;
+  Gender? _selectedGender;
+  SchoolLevel? _selectedSchoolLevel;
 
   //endregion
 
@@ -43,11 +53,23 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
 
   //endregion
 
+  //region State
+  void addUserInfo(
+      BuildContext context, DateTime dob, Gender gender, SchoolLevel level) {
+    context.read<CurrentUserCubit>().addInfo(
+          dob,
+          gender,
+          level,
+        );
+  }
+
+  //endregion
+
   //region Navigation
-  void navigateToSignUpPreference(BuildContext context) {
+  void navigateToSignUpPreference(BuildContext context, String password) {
     Navigator.of(context).push(
       MaterialPageRoute<SignUpPreferenceScreen>(
-        builder: (context) => const SignUpPreferenceScreen(),
+        builder: (context) => SignUpPreferenceScreen(password: password),
       ),
     );
   }
@@ -65,15 +87,13 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
 
     if (picked != null) {
       final String formattedDate = DateFormat('dd/MM/yyyy').format(picked);
+      _selectedDOB = picked;
       _dobController.text = formattedDate;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Gender? selectedGender;
-    SchoolLevel? selectedSchoolLevel;
-
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -171,20 +191,20 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                 RadioListTile<Gender>(
                                   title: const Text('Garçon'),
                                   value: Gender.male,
-                                  groupValue: selectedGender,
+                                  groupValue: _selectedGender,
                                   onChanged: (value) {
                                     setState(() {
-                                      selectedGender = value;
+                                      _selectedGender = value;
                                     });
                                   },
                                 ),
                                 RadioListTile<Gender>(
                                   title: const Text('Fille'),
                                   value: Gender.female,
-                                  groupValue: selectedGender,
+                                  groupValue: _selectedGender,
                                   onChanged: (value) {
                                     setState(() {
-                                      selectedGender = value;
+                                      _selectedGender = value;
                                     });
                                   },
                                 ),
@@ -201,40 +221,40 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                 RadioListTile<SchoolLevel>(
                                   title: const Text('Collège'),
                                   value: SchoolLevel.college,
-                                  groupValue: selectedSchoolLevel,
+                                  groupValue: _selectedSchoolLevel,
                                   onChanged: (value) {
                                     setState(() {
-                                      selectedSchoolLevel = value;
+                                      _selectedSchoolLevel = value;
                                     });
                                   },
                                 ),
                                 RadioListTile<SchoolLevel>(
                                   title: const Text('Lycée'),
                                   value: SchoolLevel.highSchool,
-                                  groupValue: selectedSchoolLevel,
+                                  groupValue: _selectedSchoolLevel,
                                   onChanged: (value) {
                                     setState(() {
-                                      selectedSchoolLevel = value;
+                                      _selectedSchoolLevel = value;
                                     });
                                   },
                                 ),
                                 RadioListTile<SchoolLevel>(
                                   title: const Text('Études supérieures'),
                                   value: SchoolLevel.higherEducation,
-                                  groupValue: selectedSchoolLevel,
+                                  groupValue: _selectedSchoolLevel,
                                   onChanged: (value) {
                                     setState(() {
-                                      selectedSchoolLevel = value;
+                                      _selectedSchoolLevel = value;
                                     });
                                   },
                                 ),
                                 RadioListTile<SchoolLevel>(
                                   title: const Text('Autres'),
                                   value: SchoolLevel.other,
-                                  groupValue: selectedSchoolLevel,
+                                  groupValue: _selectedSchoolLevel,
                                   onChanged: (value) {
                                     setState(() {
-                                      selectedSchoolLevel = value;
+                                      _selectedSchoolLevel = value;
                                     });
                                   },
                                 ),
@@ -254,9 +274,15 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                   text: "Suivant",
                   onPressed: () {
                     if (_dobController.text.isNotEmpty) {
-                      if (selectedGender != null) {
-                        if (selectedSchoolLevel != null) {
-                          navigateToSignUpPreference(context);
+                      if (_selectedGender != null) {
+                        if (_selectedSchoolLevel != null) {
+                          addUserInfo(
+                            context,
+                            _selectedDOB,
+                            _selectedGender!,
+                            _selectedSchoolLevel!,
+                          );
+                          navigateToSignUpPreference(context, widget.password);
                         } else {
                           showDialog<AlertDialog>(
                             context: context,

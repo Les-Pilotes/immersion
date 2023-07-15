@@ -22,7 +22,6 @@ class _SignInScreenState extends State<SignInScreen> {
   late final TextEditingController _passwordController;
   final _focusEmail = FocusNode();
   final _focusPassword = FocusNode();
-  bool _isProcessing = false;
 
   @override
   void initState() {
@@ -67,49 +66,52 @@ class _SignInScreenState extends State<SignInScreen> {
                   vertical: 16,
                   horizontal: 32,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const PrimaryPageTitle(
-                      title: "Connexion",
-                    ),
-                    Container(
-                      height: 22,
-                    ),
-                    const Text("Connecte-toi à ton compte"),
-                    Container(
-                      height: 79,
-                    ),
-                    PilotesInputField(
-                      fieldHintText: "Adresse mail",
-                      fieldName: 'email',
-                      fieldIcon: const Icon(Icons.info_outline_rounded),
-                      controller: _emailController,
-                      currentNode: _focusEmail,
-                      nextNode: _focusPassword,
-                      fieldActionType: TextInputAction.next,
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.email(),
-                      ]),
-                    ),
-                    Container(
-                      height: 24,
-                    ),
-                    PilotesInputField(
-                      fieldHintText: "Mot de passe",
-                      fieldName: 'password',
-                      fieldIcon: const Icon(Icons.info_outline_rounded),
-                      controller: _passwordController,
-                      currentNode: _focusPassword,
-                      passwordField: true,
-                      fieldActionType: TextInputAction.done,
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.minLength(6),
-                      ]),
-                    ),
-                  ],
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const PrimaryPageTitle(
+                        title: "Connexion",
+                      ),
+                      Container(
+                        height: 22,
+                      ),
+                      const Text("Connecte-toi à ton compte"),
+                      Container(
+                        height: 79,
+                      ),
+                      PilotesInputField(
+                        fieldHintText: "Adresse mail",
+                        fieldName: 'email',
+                        fieldIcon: const Icon(Icons.info_outline_rounded),
+                        controller: _emailController,
+                        currentNode: _focusEmail,
+                        nextNode: _focusPassword,
+                        fieldActionType: TextInputAction.next,
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.email(),
+                        ]),
+                      ),
+                      Container(
+                        height: 24,
+                      ),
+                      PilotesInputField(
+                        fieldHintText: "Mot de passe",
+                        fieldName: 'password',
+                        fieldIcon: const Icon(Icons.info_outline_rounded),
+                        controller: _passwordController,
+                        currentNode: _focusPassword,
+                        passwordField: true,
+                        fieldActionType: TextInputAction.done,
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.minLength(6),
+                        ]),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -117,7 +119,13 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [
                 PrimaryButton(
                   text: "Se connecter",
-                  onPressed: () => navigateToHome(context),
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      // TODO(amadoug2g): check that the user actually exists in DB
+                      // TODO(amadoug2g): hide the button when processing signing in/up
+                      navigateToHome(context);
+                    }
+                  },
                 ),
                 SuggestionSubtitle(
                   firstText: 'Pas de compte ?',
