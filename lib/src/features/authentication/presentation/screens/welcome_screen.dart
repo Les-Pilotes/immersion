@@ -9,6 +9,7 @@ class WelcomeScreen extends StatelessWidget {
 
   static const String routeName = "/";
 
+  //region Navigation
   void navigateToSignIn(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute<SignInScreen>(
@@ -26,6 +27,7 @@ class WelcomeScreen extends StatelessWidget {
             (route) => false,
     );
   }
+  //endregion
 
   @override
   Widget build(BuildContext context) {
