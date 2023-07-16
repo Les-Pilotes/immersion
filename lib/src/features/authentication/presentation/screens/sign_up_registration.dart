@@ -192,8 +192,6 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                                   PilotesInputField(
                                     fieldHintText: "Adresse mail",
                                     fieldName: 'email',
-                                    fieldIcon:
-                                        const Icon(Icons.info_outline_rounded),
                                     controller: _emailController,
                                     currentNode: _focusEmail,
                                     nextNode: _focusPassword,
@@ -210,7 +208,7 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                                     fieldHintText: "Mot de passe",
                                     fieldName: "password",
                                     fieldIcon: const Icon(
-                                        Icons.remove_red_eye_rounded),
+                                        Icons.remove_red_eye_rounded,),
                                     controller: _passwordController,
                                     currentNode: _focusPassword,
                                     nextNode: _focusConfPassword,
@@ -228,7 +226,7 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                                     fieldHintText: "Confirmation mot de passe",
                                     fieldName: 'confirmPassword',
                                     fieldIcon: const Icon(
-                                        Icons.remove_red_eye_rounded),
+                                        Icons.remove_red_eye_rounded,),
                                     controller: _passwordConfController,
                                     currentNode: _focusConfPassword,
                                     passwordField: true,
@@ -263,7 +261,7 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                       if (_formKey.currentState?.validate() ?? false) {
                         initializeUser(context);
                         navigateToSignUpInformation(
-                            context, _passwordController.text);
+                            context, _passwordController.text,);
                       }
                     },
                   ),
