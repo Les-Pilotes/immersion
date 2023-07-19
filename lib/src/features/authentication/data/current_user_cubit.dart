@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immersion/src/features/authentication/data/firebase_constants.dart';
 import 'package:immersion/src/features/authentication/data/firebase_registration_helper.dart';

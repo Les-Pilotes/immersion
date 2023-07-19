@@ -6,8 +6,10 @@ class CustomShapeClipper extends CustomClipper<Path> {
     final path = Path();
     debugPrint("Path");
 
-    path.lineTo(0, size.height); // Start at top left
-    path.lineTo(0, size.height - 50);
+    path..lineTo(0, size.height) // Start at top left
+      ..lineTo(0, size.height - 50);
+
+    debugPrint("Path");
 
     path
       ..quadraticBezierTo(
@@ -15,13 +17,13 @@ class CustomShapeClipper extends CustomClipper<Path> {
         size.height - 20,
         0,
         size.height - 10,
-      );
+      )
 
-    path.lineTo(0, size.height - 40);
+    ..lineTo(0, size.height - 40)
 
     //path.moveTo(0, size.height - 50);
 
-    path
+
       ..quadraticBezierTo(
         size.width / 7,
         size.height,

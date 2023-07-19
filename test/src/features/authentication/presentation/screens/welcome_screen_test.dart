@@ -22,7 +22,7 @@ void main() {
 
     final titleFinder = find.text('Les Pilotes');
     final messageFinder = find.text(
-        "Explorez de nouvelles opportunités, développez vos compétences et connectez-vous avec des professionnels grâce à notre application dédiée à l'emploi et à l'éducation.");
+        "Explorez de nouvelles opportunités, développez vos compétences et connectez-vous avec des professionnels grâce à notre application dédiée à l'emploi et à l'éducation.",);
     final primaryButtonFinder = find.text('Connexion');
     final secondaryButtonFinder = find.text('Inscription');
 

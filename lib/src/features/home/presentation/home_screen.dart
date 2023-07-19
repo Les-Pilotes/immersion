@@ -1,10 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:immersion/src/features/immersion/domain/event_model.dart';
 import 'package:immersion/src/utils/styles.dart';
 import 'package:immersion/src/utils/ui_library/interface/search_bar_with_icon.dart';
-import 'package:immersion/src/utils/ui_library/list/article_carousel.dart';
-import 'package:immersion/src/utils/ui_library/list/article_tile.dart';
 import 'package:immersion/src/utils/ui_library/list/event_card.dart';
 import 'package:immersion/src/utils/ui_library/list/event_carousel.dart';
 import 'package:immersion/src/utils/ui_library/list/firebase_event_list.dart';
@@ -32,8 +29,8 @@ class HomeScreen extends StatelessWidget {
     lng: 2.331286428835271,
     organizerName: "JobTeaser",
     description:
-        "Bienvenue à la visite d'entreprise de JobTeaser ! Lors de cette journée, les étudiants et"
-        "lycéens auront l'occasion de découvrir le programme passionnant que nous avons préparé spécialement pour eux."
+        "Bienvenue à la visite d'entreprise de JobTeaser ! Lors de cette journée, les étudiants et "
+        "lycéens auront l'occasion de découvrir le programme passionnant que nous avons préparé spécialement pour eux. "
         "Ils auront l'opportunité de rencontrer notre équipe dynamique composée de professionnels expérimentés "
         "dans le domaine de l'orientation professionnelle et du recrutement."
         "\n\nAu cours de cette visite, ils pourront en apprendre davantage sur notre plateforme innovante qui vise à "
@@ -60,8 +57,8 @@ class HomeScreen extends StatelessWidget {
     lng: 2.331286428835271,
     organizerName: "JobTeaser",
     description:
-        "Bienvenue à la visite d'entreprise de JobTeaser ! Lors de cette journée, les étudiants et"
-        "lycéens auront l'occasion de découvrir le programme passionnant que nous avons préparé spécialement pour eux."
+        "Bienvenue à la visite d'entreprise de JobTeaser ! Lors de cette journée, les étudiants et "
+        "lycéens auront l'occasion de découvrir le programme passionnant que nous avons préparé spécialement pour eux. "
         "Ils auront l'opportunité de rencontrer notre équipe dynamique composée de professionnels expérimentés "
         "dans le domaine de l'orientation professionnelle et du recrutement."
         "\n\nAu cours de cette visite, ils pourront en apprendre davantage sur notre plateforme innovante qui vise à "
@@ -88,8 +85,8 @@ class HomeScreen extends StatelessWidget {
     lng: 2.331286428835271,
     organizerName: "JobTeaser",
     description:
-        "Bienvenue à la visite d'entreprise de JobTeaser ! Lors de cette journée, les étudiants et"
-        "lycéens auront l'occasion de découvrir le programme passionnant que nous avons préparé spécialement pour eux."
+        "Bienvenue à la visite d'entreprise de JobTeaser ! Lors de cette journée, les étudiants et "
+        "lycéens auront l'occasion de découvrir le programme passionnant que nous avons préparé spécialement pour eux. "
         "Ils auront l'opportunité de rencontrer notre équipe dynamique composée de professionnels expérimentés "
         "dans le domaine de l'orientation professionnelle et du recrutement."
         "\n\nAu cours de cette visite, ils pourront en apprendre davantage sur notre plateforme innovante qui vise à "
@@ -180,6 +177,7 @@ class HomeScreen extends StatelessWidget {
       ),
     ];
 
+    /*
     final List<ArticleTile> articleTitles = [
       const ArticleTile(
         title: "Titre de l'article",
@@ -218,6 +216,7 @@ class HomeScreen extends StatelessWidget {
         theme: "Theme",
       ),
     ];
+    */
 
     return Column(
       children: [

@@ -24,7 +24,7 @@ class Event {
     final String eventImageUrl = snapshot.get('imageUrl') as String;
     final DateTime eventDate = (snapshot.get('eventDate') as Timestamp).toDate();
     final EventType eventType = Event.getEventTypeFromString(snapshot.get('eventType') as String);
-    final Duration eventDuration = const Duration(minutes: 60); // Set the actual duration based on your logic
+    const Duration eventDuration = Duration(minutes: 60); // Set the actual duration based on your logic
     final double eventLat = snapshot.get('lat') as double;
     final double eventLng = snapshot.get('lng') as double;
     final String eventOrganizerName = snapshot.get('organizerName') as String;
