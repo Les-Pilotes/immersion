@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
+import 'package:immersion/src/features/authentication/data/firebase_constants.dart';
+import 'package:immersion/src/features/authentication/domain/user_model.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_registration.dart';
+import 'package:immersion/src/features/home/presentation/home_navigation_screen.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
 import 'package:immersion/src/utils/ui_library/button/secondary_button.dart';
 
@@ -15,7 +20,7 @@ class WelcomeScreen extends StatelessWidget {
       MaterialPageRoute<SignInScreen>(
         builder: (context) => const SignInScreen(),
       ),
-            (route) => false,
+      (route) => false,
     );
   }
 
@@ -24,89 +29,121 @@ class WelcomeScreen extends StatelessWidget {
       MaterialPageRoute<SignUpRegistrationScreen>(
         builder: (context) => const SignUpRegistrationScreen(),
       ),
-            (route) => false,
+      (route) => false,
     );
   }
+
+  void navigateToHome(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute<SignUpRegistrationScreen>(
+        builder: (context) => const HomeNavigationScreen(),
+      ),
+      (route) => false,
+    );
+  }
+
+  void checkLoggedInUser(BuildContext context) {
+    if (FirebaseInstances.firebaseAuthInstance.currentUser != null) {
+      navigateToHome(context);
+    }
+  }
+
+  void checkCurrentUser(BuildContext context) {
+    if (FirebaseInstances.firebaseAuthInstance.currentUser != null) {
+      final userId = FirebaseInstances.firebaseAuthInstance.currentUser!.uid;
+      BlocProvider.of<CurrentUserCubit>(context).retrieveUser(userId);
+    }
+  }
+
   //endregion
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Stack(
-            children: [
-              //CustomShapeImage(
-                //child: Transform.scale(scale: 1.65, child:
-                  Image.asset(
-                    'assets/images/immersion_mla.png',
-                    fit: BoxFit.fill,
-                  ),
-                //),
-              //),
-              Positioned(
-                top: 60,
-                right: 30,
-                bottom: 0,
-                child: Image.asset(
-                  'assets/logo/app_prod_icon.png',
-                  width: 150,
-                  height: 150,
-                  alignment: Alignment.center,
-                ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    checkCurrentUser(context);
+
+    return BlocListener<CurrentUserCubit, StudentUser>(
+      listener: (context, state) {
+        if (state.id.isNotEmpty) {
+          navigateToHome(context);
+        }
+      },
+      child: Scaffold(
+        body: Column(
+          children: [
+            Stack(
               children: [
-                const Expanded(
-                  flex: 3,
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Les Pilotes",
-                          style: TextStyle(
-                            fontSize: 34,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          "Explorez de nouvelles opportunités, développez vos compétences et connectez-vous avec des professionnels grâce à notre application dédiée à l'emploi et à l'éducation.",
-                        ),
-                      ],
-                    ),
-                  ),
+                //CustomShapeImage(
+                //child: Transform.scale(scale: 1.65, child:
+                Image.asset(
+                  'assets/images/immersion_mla.png',
+                  fit: BoxFit.fill,
                 ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      PrimaryButton(
-                        text: "Connexion",
-                        onPressed: () => navigateToSignIn(context),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SecondaryButton(
-                        text: "Inscription",
-                        onPressed: () => navigateToSignUp(context),
-                      ),
-                    ],
+                //),
+                //),
+                Positioned(
+                  top: 60,
+                  right: 30,
+                  bottom: 0,
+                  child: Image.asset(
+                    'assets/logo/app_prod_icon.png',
+                    width: 150,
+                    height: 150,
+                    alignment: Alignment.center,
                   ),
                 ),
               ],
             ),
-          ),
-        ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Expanded(
+                    flex: 3,
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Les Pilotes",
+                            style: TextStyle(
+                              fontSize: 34,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            "Explorez de nouvelles opportunités, développez vos compétences et connectez-vous avec des professionnels grâce à notre application dédiée à l'emploi et à l'éducation.",
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        PrimaryButton(
+                          text: "Connexion",
+                          onPressed: () => navigateToSignIn(context),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        SecondaryButton(
+                          text: "Inscription",
+                          onPressed: () => navigateToSignUp(context),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

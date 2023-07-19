@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immersion/src/features/authentication/data/firebase_constants.dart';
 import 'package:immersion/src/features/authentication/data/firebase_registration_helper.dart';
@@ -63,7 +63,8 @@ class CurrentUserCubit extends Cubit<StudentUser> {
         state,
       );
 
-      final userRef = FirebaseInstances.firebaseFirestoreInstance.collection(FirebasePaths.USER_PATH)
+      final userRef = FirebaseInstances.firebaseFirestoreInstance
+          .collection(FirebasePaths.USER_PATH)
           .doc(updatedUser.id);
 
       await userRef.set(updatedUser.toMap());
@@ -104,12 +105,18 @@ class CurrentUserCubit extends Cubit<StudentUser> {
     emit(StudentUser(id: '', lastName: '', firstName: '', email: ''));
   }
 
-  Future<void> retrieveUser() async {
-    // TODO(amadoug2g): Replace with fetching user from Firestore using user id
+  Future<void> retrieveUser(String userId) async {
+    final DocumentSnapshot snapshot = await FirebaseInstances
+        .firebaseFirestoreInstance
+        .collection(FirebasePaths.USER_PATH)
+        .doc(userId)
+        .get();
 
-    final User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      //emit(StudentUser.fromFirebaseUser(user));
+    if (snapshot.exists) {
+      final user = StudentUser.fromSnapshot(snapshot);
+      emit(user);
+    } else {
+      throw Exception('User not found in the database');
     }
   }
 }

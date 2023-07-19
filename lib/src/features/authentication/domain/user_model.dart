@@ -39,10 +39,22 @@ class StudentUser {
   factory StudentUser.fromSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data()! as Map<String, dynamic>;
     return StudentUser(
-      id: data['id'] as String,
-      firstName: data['firstName'] as String,
-      lastName: data['lastName'] as String,
-      email: data['email'] as String,
+      //id: data['id'] as String,
+      id: snapshot.get('id') as String,
+      firstName: snapshot.get('firstName') as String,
+      lastName: snapshot.get('lastName') as String,
+      email: snapshot.get('email') as String,
+    ).copyWith(
+      bio: snapshot.get('bio') as String,
+      gender: StudentUser.getGenderFromString(snapshot.get('gender') as String),
+      schoolLevel: StudentUser.getSchoolLevelFromString(snapshot.get('schoolLevel') as String),
+      profileImageUrl: snapshot.get('email') as String,
+      dateOfBirth: (snapshot.get('dateOfBirth') as Timestamp).toDate(),
+      devices: (snapshot.get('devices') as List<String>?) ?? [],
+      preferences: (snapshot.get('preferences') as List<dynamic>).cast<String>(),
+      //favoriteEvents: snapshot.get('favoriteEvents') as List<Event>,
+      //participationEvents: snapshot.get('participationEvents') as List<Event>,
+      createdDate: (snapshot.get('createdDate') as Timestamp).toDate(),
     );
   }
 
@@ -79,8 +91,9 @@ class StudentUser {
   List<String>? preferences;
   List<Event>? favoriteEvents;
   List<Event>? participationEvents;
-  final DateTime createdDate = DateTime.now();
+  DateTime createdDate = DateTime.now();
 
+  // TODO(amadoug2g): Add sub-collections for favorites and participation, or id lists for each
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -92,12 +105,42 @@ class StudentUser {
       'gender': gender?.name,
       'schoolLevel': schoolLevel?.name,
       'preferences': preferences,
+      //'favoriteEvents': favoriteEvents,
+      //'participationEvents': participationEvents,
       'devices': devices,
       'createdDate': createdDate,
     };
   }
 
   String get fullName => "$firstName $lastName";
+
+  static Gender getGenderFromString(String genderString) {
+    switch (genderString) {
+      case 'Fille':
+        return Gender.female;
+      case 'Garçon':
+        return Gender.male;
+      case 'Non défini':
+        return Gender.undefined;
+      default:
+        throw Exception('Unsupported genderString: $genderString');
+    }
+  }
+
+  static SchoolLevel getSchoolLevelFromString(String schoolLevelString) {
+    switch (schoolLevelString) {
+      case 'Collège':
+        return SchoolLevel.college;
+      case 'Lycée':
+        return SchoolLevel.highSchool;
+      case 'Études supérieures':
+        return SchoolLevel.higherEducation;
+      case 'Autres':
+        return SchoolLevel.other;
+      default:
+        throw Exception('Unsupported schoolLevelString: $schoolLevelString');
+    }
+  }
 
   StudentUser copyWith({
     String? id,
@@ -109,6 +152,7 @@ class StudentUser {
     SchoolLevel? schoolLevel,
     String? profileImageUrl,
     DateTime? dateOfBirth,
+    DateTime? createdDate,
     List<String>? devices,
     List<String>? preferences,
     List<Event>? favoriteEvents,
@@ -125,6 +169,7 @@ class StudentUser {
       ..schoolLevel = schoolLevel ?? this.schoolLevel
       ..profileImageUrl = profileImageUrl ?? this.profileImageUrl
       ..dateOfBirth = dateOfBirth ?? this.dateOfBirth
+      ..createdDate = createdDate ?? this.createdDate
       ..devices = devices ?? this.devices
       ..preferences = preferences ?? this.preferences
       ..favoriteEvents = favoriteEvents ?? this.favoriteEvents

@@ -86,15 +86,15 @@ android {
         prod {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            // storeFile file('../upload-keystore.jks')
+            // storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null // use with CI/CD
+            storeFile file('../upload-keystore.jks') // use with manual signing
             storePassword keystoreProperties['storePassword']
         }
         dev {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            // storeFile file('../upload-keystore.jks')
+            // storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storeFile file('../upload-keystore.jks')
             storePassword keystoreProperties['storePassword']
         }
     }
