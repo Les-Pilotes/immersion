@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
+import 'package:immersion/src/features/authentication/data/firebase_registration_helper.dart';
 import 'package:immersion/src/features/authentication/domain/student_preferences.dart';
 import 'package:immersion/src/features/home/presentation/home_navigation_screen.dart';
 import 'package:immersion/src/utils/styles.dart';
@@ -21,25 +22,74 @@ class SignUpPreferenceScreen extends StatefulWidget {
 }
 
 class _SignUpPreferenceScreenState extends State<SignUpPreferenceScreen> {
+  //region Variables
   final List<String> selectedItems = [];
-
   List<Preferences> preferences = Preferences.values;
+  Future<void>? signUpFuture;
 
-  //region State
-  void addUserPreferences(BuildContext context) {
-    context.read<CurrentUserCubit>().addPreferences(
-          preferences,
+  //endregion
+
+  //region Form Validation
+  void addPreferences(BuildContext context) {
+    context.read<CurrentUserCubit>().addUserPreferences(
+      getPreferencesFromSelected(selectedItems),
         );
   }
 
-  void registerUser(BuildContext context) {
-    context.read<CurrentUserCubit>().signUpUser(
-          widget.password,
+  List<String> getPreferencesFromSelected(List<String> selectedList) {
+    final List<String> preferenceList = [];
+
+    for (final item in selectedList) {
+      for (final pref in Preferences.values) {
+        if (item == pref.name) {
+          preferenceList.add(pref.id);
+        }
+      }
+    }
+
+    return preferenceList;
+  }
+
+  Future<void> signUp(BuildContext context) async {
+    addPreferences(context);
+    try {
+      await context.read<CurrentUserCubit>().signUpUser(
+            widget.password,
+          );
+
+      if (mounted) {
+        navigateToHome(context);
+      }
+    } on AuthenticationException catch (e) {
+      displayEmailErrorMessage(e.message);
+    } catch (error) {
+      displayEmailErrorMessage(error.toString());
+    }
+  }
+
+  void displayEmailErrorMessage(String e) {
+    showDialog<AlertDialog>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Adresse email'),
+          content: Text('Une erreur est survenue: $e'),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
         );
+      },
+    );
   }
 
   //endregion
 
+  //region Navigation
   void navigateToHome(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(
       context,
@@ -47,6 +97,8 @@ class _SignUpPreferenceScreenState extends State<SignUpPreferenceScreen> {
       (route) => false,
     );
   }
+
+  //endregion
 
   @override
   Widget build(BuildContext context) {
@@ -147,35 +199,49 @@ class _SignUpPreferenceScreenState extends State<SignUpPreferenceScreen> {
             ),
             Column(
               children: [
-                PrimaryButton(
-                  text: "S'inscrire",
-                  onPressed: () {
-                    if (selectedItems.isNotEmpty) {
-                      addUserPreferences(context);
-                      registerUser(context);
-                      // TODO(amadoug2g): check that the user does not already exists in DB
-                      navigateToHome(context);
-                    } else {
-                      showDialog<AlertDialog>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Préféremces'),
-                            content:
-                                const Text('Choississez au moins 1 option'),
-                            actions: [
-                              TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
+                FutureBuilder(
+                  future: signUpFuture,
+                  builder: (context, snapshot) {
+                    if (signUpFuture == null ||
+                        snapshot.connectionState == ConnectionState.done) {
+                      return PrimaryButton(
+                        text: "S'inscrire",
+                        onPressed: () async {
+                          if (selectedItems.isNotEmpty) {
+                            if (mounted) {
+                              setState(() {
+                                signUpFuture = signUp(context);
+                              });
+                            }
+                          } else {
+                            if (mounted) {
+                              await showDialog<AlertDialog>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Préféremces'),
+                                    content: const Text(
+                                        'Choississez au moins 1 option',),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('OK'),
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        },
+                                      ),
+                                    ],
+                                  );
                                 },
-                              ),
-                            ],
-                          );
+                              );
+                            }
+                          }
                         },
                       );
                     }
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
                   },
                 ),
                 const SizedBox(height: 40),

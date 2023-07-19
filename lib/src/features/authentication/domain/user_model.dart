@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:immersion/src/features/authentication/domain/gender.dart';
 import 'package:immersion/src/features/authentication/domain/school_level.dart';
-import 'package:immersion/src/features/authentication/domain/student_preferences.dart';
 import 'package:immersion/src/features/immersion/domain/event_model.dart';
 
 class StudentUser {
@@ -13,12 +12,27 @@ class StudentUser {
     required this.email,
   });
 
-  factory StudentUser.fromFirebaseUser(User firebaseUser, String firstName, String lastName) {
+  factory StudentUser.fromFirebaseUser(
+    User firebaseUser,
+    String firstName,
+    String lastName,
+    StudentUser user,
+  ) {
     return StudentUser(
       id: firebaseUser.uid,
-      firstName: firstName ?? '',
-      lastName: lastName ?? '',
+      firstName: firstName,
+      lastName: lastName,
       email: firebaseUser.email ?? '',
+    ).copyWith(
+      bio: user.bio,
+      gender: user.gender,
+      schoolLevel: user.schoolLevel,
+      profileImageUrl: user.profileImageUrl,
+      dateOfBirth: user.dateOfBirth,
+      devices: user.devices,
+      preferences: user.preferences,
+      favoriteEvents: user.favoriteEvents,
+      participationEvents: user.participationEvents,
     );
   }
 
@@ -32,20 +46,39 @@ class StudentUser {
     );
   }
 
+  @override
+  String toString() {
+    return 'StudentUser('
+        'id: $id, '
+        'firstName: $firstName, '
+        'lastName: $lastName, '
+        'email: $email, '
+        'bio: $bio, '
+        'gender: $gender, '
+        'schoolLevel: $schoolLevel, '
+        'profileImageUrl: $profileImageUrl, '
+        'dateOfBirth: $dateOfBirth, '
+        'devices: $devices, '
+        'preferences: $preferences, '
+        'favoriteEvents: $favoriteEvents, '
+        'participationEvents: $participationEvents, '
+        'createdDate: $createdDate'
+        ')';
+  }
 
   late final String id;
   String firstName;
   String lastName;
   String email;
-  late String bio;
-  late Gender gender;
-  late SchoolLevel schoolLevel;
-  late String profileImageUrl;
-  late DateTime dateOfBirth;
-  late List<String> devices;
-  late List<Preferences>? preferences;
-  late List<Event>? favoriteEvents;
-  late List<Event>? participationEvents;
+  String bio = '';
+  Gender? gender;
+  SchoolLevel? schoolLevel;
+  String? profileImageUrl;
+  DateTime? dateOfBirth;
+  List<String>? devices;
+  List<String>? preferences;
+  List<Event>? favoriteEvents;
+  List<Event>? participationEvents;
   final DateTime createdDate = DateTime.now();
 
   Map<String, dynamic> toMap() {
@@ -54,11 +87,12 @@ class StudentUser {
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
+      'bio': bio,
       'dateOfBirth': dateOfBirth,
-      'gender': gender,
-      'schoolLevel': schoolLevel,
+      'gender': gender?.name,
+      'schoolLevel': schoolLevel?.name,
       'preferences': preferences,
-      //'devices': devices,
+      'devices': devices,
       'createdDate': createdDate,
     };
   }
@@ -76,16 +110,24 @@ class StudentUser {
     String? profileImageUrl,
     DateTime? dateOfBirth,
     List<String>? devices,
-    List<Preferences>? preferences,
+    List<String>? preferences,
     List<Event>? favoriteEvents,
     List<Event>? participationEvents,
-    DateTime? createdDate,
   }) {
     return StudentUser(
       id: id ?? this.id,
       lastName: lastName ?? this.lastName,
       firstName: firstName ?? this.firstName,
       email: email ?? this.email,
-    );
+    )
+      ..bio = bio ?? this.bio
+      ..gender = gender ?? this.gender
+      ..schoolLevel = schoolLevel ?? this.schoolLevel
+      ..profileImageUrl = profileImageUrl ?? this.profileImageUrl
+      ..dateOfBirth = dateOfBirth ?? this.dateOfBirth
+      ..devices = devices ?? this.devices
+      ..preferences = preferences ?? this.preferences
+      ..favoriteEvents = favoriteEvents ?? this.favoriteEvents
+      ..participationEvents = participationEvents ?? this.participationEvents;
   }
 }

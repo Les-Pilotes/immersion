@@ -1,6 +1,7 @@
 enum Gender {
   female,
   male,
+  undefined,
 }
 
 extension GenderExtension on Gender {
@@ -10,6 +11,8 @@ extension GenderExtension on Gender {
         return 'Fille';
       case Gender.male:
         return 'Garçon';
+      case Gender.undefined:
+        return 'Non défini';
     }
   }
 }

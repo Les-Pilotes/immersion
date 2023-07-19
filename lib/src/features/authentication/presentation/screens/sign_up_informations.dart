@@ -54,9 +54,13 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
   //endregion
 
   //region State
-  void addUserInfo(
-      BuildContext context, DateTime dob, Gender gender, SchoolLevel level) {
-    context.read<CurrentUserCubit>().addInfo(
+  void addInfo(
+    BuildContext context,
+    DateTime dob,
+    Gender gender,
+    SchoolLevel level,
+  ) {
+    context.read<CurrentUserCubit>().addUserInfo(
           dob,
           gender,
           level,
@@ -276,7 +280,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                     if (_dobController.text.isNotEmpty) {
                       if (_selectedGender != null) {
                         if (_selectedSchoolLevel != null) {
-                          addUserInfo(
+                          addInfo(
                             context,
                             _selectedDOB,
                             _selectedGender!,

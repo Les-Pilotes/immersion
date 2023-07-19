@@ -78,4 +78,8 @@ extension PreferencesExtension on Preferences {
         return "Théologie";
     }
   }
+  String get id {
+    final String enumName = toString();
+    return enumName.split('.').last;
+  }
 }

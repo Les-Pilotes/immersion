@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:immersion/firebase_options.dart';
 import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/welcome_screen.dart';
@@ -10,7 +11,9 @@ import 'package:immersion/src/features/home/presentation/home_navigation_screen.
 
 FutureOr<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   //WidgetsFlutterBinding.ensureInitialized();
   //await Firebase.initializeApp();
@@ -19,13 +22,15 @@ FutureOr<void> main() async {
     BlocProvider<CurrentUserCubit>(
       create: (context) => CurrentUserCubit(),
       child: MaterialApp(
+        supportedLocales: const [
+          //Locale('en', 'US'),
+          Locale('fr', 'FR'),
+        ],
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en', 'US'),
-          Locale('fr', 'FR'),
+          GlobalCupertinoLocalizations.delegate,
+          FormBuilderLocalizations.delegate,
         ],
         title: 'Immersion',
         debugShowCheckedModeBanner: false,

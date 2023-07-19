@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
+import 'package:immersion/src/features/authentication/data/firebase_registration_helper.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_registration.dart';
 import 'package:immersion/src/features/home/presentation/home_navigation_screen.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
@@ -17,12 +20,17 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  //region Variables
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   final _focusEmail = FocusNode();
   final _focusPassword = FocusNode();
+  Future<void>? signInFuture;
 
+  //endregion
+
+  //region Override Methods
   @override
   void initState() {
     super.initState();
@@ -37,6 +45,46 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
+  //endregion
+
+  //region Form Validation
+  Future<void> signIn(BuildContext context) async {
+    try {
+      await context.read<CurrentUserCubit>().signInUser(
+            _emailController.text,
+            _passwordController.text,
+          );
+      if (mounted) navigateToHome(context);
+    } on AuthenticationException catch (e) {
+      displayEmailErrorMessage(e.message);
+    } catch (error) {
+      displayEmailErrorMessage(error.toString());
+    }
+  }
+
+  void displayEmailErrorMessage(String e) {
+    showDialog<AlertDialog>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Erreur de connexion'),
+          content: Text(e),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //endregion
+
+  //region Navigation
   void navigateToHome(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute<SignUpRegistrationScreen>(
@@ -54,87 +102,111 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
+  //endregion
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 32,
-                ),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const PrimaryPageTitle(
-                        title: "Connexion",
-                      ),
-                      Container(
-                        height: 22,
-                      ),
-                      const Text("Connecte-toi à ton compte"),
-                      Container(
-                        height: 79,
-                      ),
-                      PilotesInputField(
-                        fieldHintText: "Adresse mail",
-                        fieldName: 'email',
-                        fieldIcon: const Icon(Icons.info_outline_rounded),
-                        controller: _emailController,
-                        currentNode: _focusEmail,
-                        nextNode: _focusPassword,
-                        fieldActionType: TextInputAction.next,
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(),
-                          FormBuilderValidators.email(),
-                        ]),
-                      ),
-                      Container(
-                        height: 24,
-                      ),
-                      PilotesInputField(
-                        fieldHintText: "Mot de passe",
-                        fieldName: 'password',
-                        fieldIcon: const Icon(Icons.info_outline_rounded),
-                        controller: _passwordController,
-                        currentNode: _focusPassword,
-                        passwordField: true,
-                        fieldActionType: TextInputAction.done,
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(),
-                          FormBuilderValidators.minLength(6),
-                        ]),
-                      ),
-                    ],
+    return GestureDetector(
+      onTap: () {
+        _focusEmail.unfocus();
+        _focusPassword.unfocus();
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 32,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const PrimaryPageTitle(
+                                title: "Connexion",
+                              ),
+                              Container(
+                                height: 22,
+                              ),
+                              const Text("Connecte-toi à ton compte"),
+                              Container(
+                                height: 79,
+                              ),
+                              PilotesInputField(
+                                fieldHintText: "Adresse mail",
+                                fieldName: 'email',
+                                controller: _emailController,
+                                currentNode: _focusEmail,
+                                nextNode: _focusPassword,
+                                fieldActionType: TextInputAction.next,
+                                validator: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(),
+                                  FormBuilderValidators.email(),
+                                ]),
+                              ),
+                              Container(
+                                height: 24,
+                              ),
+                              PilotesInputField(
+                                fieldHintText: "Mot de passe",
+                                fieldName: 'password',
+                                fieldIcon:
+                                    const Icon(Icons.info_outline_rounded),
+                                controller: _passwordController,
+                                currentNode: _focusPassword,
+                                passwordField: true,
+                                fieldActionType: TextInputAction.done,
+                                validator: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(),
+                                  FormBuilderValidators.minLength(6),
+                                ]),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Column(
-              children: [
-                PrimaryButton(
-                  text: "Se connecter",
-                  onPressed: () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      // TODO(amadoug2g): check that the user actually exists in DB
-                      // TODO(amadoug2g): hide the button when processing signing in/up
-                      navigateToHome(context);
-                    }
-                  },
-                ),
-                SuggestionSubtitle(
-                  firstText: 'Pas de compte ?',
-                  secondText: 'Inscris-toi',
-                  onPressed: () => navigateToSignUp(context),
-                ),
-              ],
-            ),
-          ],
+              Column(
+                children: [
+                  FutureBuilder(
+                    future: signInFuture,
+                    builder: (context, snapshot) {
+                      if (signInFuture == null || snapshot.connectionState == ConnectionState.done) {
+                        return PrimaryButton(
+                          text: "Se connecter",
+                          onPressed: () async {
+                            if (_formKey.currentState?.validate() ?? false) {
+                              setState(() {
+                                signInFuture = signIn(context);
+                              });
+                            }
+                          },
+                        );
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                  ),
+                  SuggestionSubtitle(
+                    firstText: 'Pas de compte ?',
+                    secondText: 'Inscris-toi',
+                    onPressed: () => navigateToSignUp(context),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immersion/src/features/authentication/data/firebase_constants.dart';
 import 'package:immersion/src/features/authentication/data/firebase_registration_helper.dart';
 import 'package:immersion/src/features/authentication/domain/gender.dart';
 import 'package:immersion/src/features/authentication/domain/school_level.dart';
-import 'package:immersion/src/features/authentication/domain/student_preferences.dart';
 import 'package:immersion/src/features/authentication/domain/user_model.dart';
 
 class CurrentUserCubit extends Cubit<StudentUser> {
@@ -33,34 +33,40 @@ class CurrentUserCubit extends Cubit<StudentUser> {
     emit(updatedUser);
   }
 
-  void addInfo(DateTime dob, Gender genre, SchoolLevel schoolLevel) {
+  void addUserInfo(DateTime dob, Gender gender, SchoolLevel level) {
     final updatedUser = state.copyWith(
       dateOfBirth: dob,
-      gender: genre,
-      schoolLevel: schoolLevel,
+      gender: gender,
+      schoolLevel: level,
     );
+
     emit(updatedUser);
   }
 
-  void addPreferences(List<Preferences> preferences) {
+  void addUserPreferences(List<String> preferences) {
     final updatedUser = state.copyWith(preferences: preferences);
+
     emit(updatedUser);
   }
 
   Future<void> signUpUser(String password) async {
-    final firebaseUser = await FirebaseRegistrationHelper
-        .registerUsingEmailPassword(
+    final newUser = await FirebaseRegistrationHelper.signUpUsingEmailPassword(
       name: state.fullName,
       email: state.email,
       password: password,
     );
 
-    if (firebaseUser != null) {
-      final updatedUser = StudentUser.fromFirebaseUser(firebaseUser, state.firstName, state.lastName);
+    if (newUser != null) {
+      final updatedUser = StudentUser.fromFirebaseUser(
+        newUser,
+        state.firstName,
+        state.lastName,
+        state,
+      );
 
-      final userRef = FirebaseInstances.firebaseFirestoreInstance
-          .collection(FirebasePaths.USER_PATH)
+      final userRef = FirebaseInstances.firebaseFirestoreInstance.collection(FirebasePaths.USER_PATH)
           .doc(updatedUser.id);
+
       await userRef.set(updatedUser.toMap());
 
       emit(updatedUser);
@@ -68,7 +74,8 @@ class CurrentUserCubit extends Cubit<StudentUser> {
   }
 
   Future<void> signInUser(String email, String password) async {
-    final firebaseUser = await FirebaseRegistrationHelper.signInUsingEmailPassword(
+    final firebaseUser =
+        await FirebaseRegistrationHelper.signInUsingEmailPassword(
       email: email,
       password: password,
     );
@@ -99,7 +106,7 @@ class CurrentUserCubit extends Cubit<StudentUser> {
   }
 
   Future<void> retrieveUser() async {
-    //TODO: Replace with fetching user from Firestore using user id
+    // TODO(amadoug2g): Replace with fetching user from Firestore using user id
 
     final User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {

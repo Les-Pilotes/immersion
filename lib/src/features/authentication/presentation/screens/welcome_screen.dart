@@ -36,18 +36,22 @@ class WelcomeScreen extends StatelessWidget {
         children: [
           Stack(
             children: [
-              Image.asset(
-                'assets/images/immersion_mla.png',
-                fit: BoxFit.cover,
-              ),
+              //CustomShapeImage(
+                //child: Transform.scale(scale: 1.65, child:
+                  Image.asset(
+                    'assets/images/immersion_mla.png',
+                    fit: BoxFit.fill,
+                  ),
+                //),
+              //),
               Positioned(
-                top: 150,
-                right: 0,
+                top: 60,
+                right: 30,
                 bottom: 0,
                 child: Image.asset(
                   'assets/logo/app_prod_icon.png',
-                  width: 130,
-                  height: 130,
+                  width: 150,
+                  height: 150,
                   alignment: Alignment.center,
                 ),
               ),

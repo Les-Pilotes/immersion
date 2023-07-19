@@ -16,13 +16,14 @@ class SecondaryButton extends StatelessWidget {
     return SizedBox(
       width: 360,
       height: 46,
-      child: DecoratedBox(
+      child: Container(
         decoration: BoxDecoration(
           border: Border.all(
             color: primaryColor,
           ),
           borderRadius: BorderRadius.circular(10),
         ),
+        padding: EdgeInsets.zero,
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(

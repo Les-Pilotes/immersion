@@ -22,6 +22,7 @@ class FirebaseUser {
 class FirebasePaths {
   static const String ENV = FirestoreString.ENV_TEST;
   static const String USER_PATH = "Env/$ENV/User";
+  static const String EVENT_PATH = "Env/$ENV/Event";
 }
 
 class Strings {
