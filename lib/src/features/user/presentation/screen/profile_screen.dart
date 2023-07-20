@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
+import 'package:immersion/src/features/authentication/domain/user_model.dart';
+import 'package:immersion/src/features/authentication/presentation/screens/welcome_screen.dart';
+import 'package:immersion/src/utils/extension.dart';
 import 'package:immersion/src/utils/ui_library/button/secondary_button.dart';
 import 'package:immersion/src/utils/ui_library/button/small_primary_button.dart';
 
@@ -7,116 +12,105 @@ class ProfileScreen extends StatelessWidget {
 
   static const String routeName = "/home/profile";
 
+  Future<void> logOut(BuildContext context) async {
+    await context.read<CurrentUserCubit>().logOutUser();
+    //if (mounted)
+      navigateToHome(context);
+  }
+
+  void navigateToHome(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute<WelcomeScreen>(
+        builder: (context) => const WelcomeScreen(),
+      ),
+          (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              const Center(
-                child: CircleAvatar(
-                  radius: 70,
-                  backgroundColor: Colors.red,
-                  //backgroundImage: AssetImage('your_image_path'),
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Jane Doe',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              const Text(
-                'Lycéenne | Pilotes',
-                style: TextStyle(
-                  fontSize: 18,
-                  letterSpacing: 1,
-                ),
-              ),
-              Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10,
+    return BlocBuilder<CurrentUserCubit, StudentUser>(
+      builder: (context, currentUser) {
+        return Scaffold(
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      const SizedBox(height: 40),
+                      const Center(
+                        child: CircleAvatar(
+                          radius: 70,
+                          backgroundColor: Colors.red,
+                          //backgroundImage: AssetImage('your_image_path'),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        currentUser.fullName,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        '${currentUser.schoolLevel!.name.capitalize()} | Pilotes',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                        ),
+                        child: SmallPrimaryButton(
+                          text: "Éditer le profil",
+                          onPressed: () {},
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          currentUser.bio,
+                          textAlign: TextAlign.justify,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      Section(
+                        title: 'Centre(s) d’intérêt(s)',
+                        description: currentUser.formattedPreferencesList,
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                   ),
-                  child: SmallPrimaryButton(
-                      text: "Éditer le profil", onPressed: () {},),),
-              const SizedBox(height: 16),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Je suis une élève passionnée par la création artistique et le design, mais aussi les aspects juridiques et les langues étrangères.\n\nJ’aime également explorer le monde des sciences naturelles et comprendre comment les phénomènes qui nous entourent fonctionnent.',
-                  textAlign: TextAlign.justify,
-                  style: TextStyle(
-                    fontSize: 16,
-                    letterSpacing: 1,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
-              const Section(
-                title: 'Centre(s) d’intérêt(s)',
-                description: 'Design, Droit, Langues , Sciences naturelles',
-              ),
-              const Section(
-                title: 'Contenu',
-                subSections: [
-                  SubSection(
-                    text: "Favoris",
-                    leadingIcon: Icons.favorite_border_rounded,
-                  ),
-                  SubSection(
-                    text: "Participation",
-                    leadingIcon: Icons.history_rounded,
-                  ),
+                  SecondaryButton(text: "Déconnexion", onPressed: () {
+                    logOut(context);
+                  },)
                 ],
               ),
-              const Section(
-                title: 'Extra',
-                subSections: [
-                  SubSection(
-                    text: "Feedback",
-                    leadingIcon: Icons.feedback_rounded,
-                  ),
-                  SubSection(
-                    text: "Mode Sombre",
-                    leadingIcon: Icons.mode_night_rounded,
-                  ),
-                ],
-              ),
-              const Section(
-                title: 'Paramètres',
-                subSections: [
-                  SubSection(
-                    text: "Notifications",
-                    leadingIcon: Icons.notifications_active_rounded,
-                  ),
-                  SubSection(
-                    text: "Condition d'utilisation",
-                    leadingIcon: Icons.document_scanner_rounded,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              SecondaryButton(text: "Déconnexion", onPressed: () {}),
-              const SizedBox(height: 16),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
 
 class Section extends StatelessWidget {
-
   const Section({
-    required this.title, super.key,
+    required this.title,
+    super.key,
     this.subSections,
     this.description,
   });
+
   final String title;
   final List<SubSection>? subSections;
   final String? description;
@@ -148,30 +142,33 @@ class Section extends StatelessWidget {
         const SizedBox(
           height: 0,
         ),
-        if (subSections != null) Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: subSections!
-                .map(
-                  (item) => Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 6,
-                ),
-                child: SubSection(
-                  text: item.text,
-                  leadingIcon: item.leadingIcon,
-                ),
-              ),
-            )
-                .toList(),
+        if (subSections != null)
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: subSections!
+                  .map(
+                    (item) => Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 6,
+                      ),
+                      child: SubSection(
+                        text: item.text,
+                        leadingIcon: item.leadingIcon,
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          )
+        else
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              description!,
+              style: const TextStyle(fontSize: 18),
+            ),
           ),
-        ) else Container(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            description!,
-            style: const TextStyle(fontSize: 18),
-          ),
-        ),
       ],
     );
   }
@@ -179,7 +176,8 @@ class Section extends StatelessWidget {
 
 class SubSection extends StatelessWidget {
   const SubSection({
-    required this.text, super.key,
+    required this.text,
+    super.key,
     this.leadingIcon,
   });
 

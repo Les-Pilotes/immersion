@@ -1,14 +1,32 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:immersion/firebase_options.dart';
+import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/welcome_screen.dart';
 
+import '../../../../../mock.dart';
+
 void main() {
+  setupFirebaseAuthMocks();
+
+  setUpAll(() async {
+    await Firebase.initializeApp();
+  });
+
   testWidgets('WelcomeScreen displays UI elements and has proper navigation',
       (tester) async {
+    //WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+
     await tester.pumpWidget(
-      const MaterialApp(
-        home: WelcomeScreen(),
+      BlocProvider<CurrentUserCubit>(
+        create: (context) => CurrentUserCubit(),
+        child: const MaterialApp(
+          home: WelcomeScreen(),
+        ),
       ),
     );
 
@@ -22,7 +40,8 @@ void main() {
 
     final titleFinder = find.text('Les Pilotes');
     final messageFinder = find.text(
-        "Explorez de nouvelles opportunités, développez vos compétences et connectez-vous avec des professionnels grâce à notre application dédiée à l'emploi et à l'éducation.",);
+      "Explorez de nouvelles opportunités, développez vos compétences et connectez-vous avec des professionnels grâce à notre application dédiée à l'emploi et à l'éducation.",
+    );
     final primaryButtonFinder = find.text('Connexion');
     final secondaryButtonFinder = find.text('Inscription');
 

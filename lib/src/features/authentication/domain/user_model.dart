@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:immersion/src/features/authentication/domain/gender.dart';
 import 'package:immersion/src/features/authentication/domain/school_level.dart';
 import 'package:immersion/src/features/immersion/domain/event_model.dart';
+import 'package:immersion/src/utils/extension.dart';
 
 class StudentUser {
   StudentUser({
@@ -140,6 +141,18 @@ class StudentUser {
       default:
         throw Exception('Unsupported schoolLevelString: $schoolLevelString');
     }
+  }
+
+  String get formattedPreferencesList {
+    preferences.toString();
+
+    final List<String> result = [];
+
+    for (final pref in preferences!) {
+      result.add(pref.capitalize());
+    }
+
+    return result.toString().substring(1, result.toString().length-1);
   }
 
   StudentUser copyWith({

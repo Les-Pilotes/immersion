@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:immersion/src/features/immersion/domain/event_model.dart';
 import 'package:immersion/src/utils/styles.dart';
 import 'package:immersion/src/utils/ui_library/interface/search_bar_with_icon.dart';
-import 'package:immersion/src/utils/ui_library/list/event_card.dart';
-import 'package:immersion/src/utils/ui_library/list/event_carousel.dart';
 import 'package:immersion/src/utils/ui_library/list/firebase_event_list.dart';
 import 'package:immersion/src/utils/ui_library/text/primary_page_title.dart';
 
@@ -150,6 +148,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /*
     final List<EventCard2> immersionTiles = [
       EventCard2(
         imageUrl: 'assets/images/immersion_powder.jpg',
@@ -176,6 +175,7 @@ class HomeScreen extends StatelessWidget {
         //=> navigateToEventDetails(context),
       ),
     ];
+    */
 
     /*
     final List<ArticleTile> articleTitles = [
@@ -256,16 +256,11 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              EventCarousel2(tiles: immersionTiles),
+              const FirebaseEventList(),
             ],
           ),
         ),
         const SizedBox(height: 24),
-        Container(
-          padding: const EdgeInsets.all(20),
-          height: 400,
-          child: const FirebaseEventList(),
-        ),
         /*
         Expanded(
           child: Padding(

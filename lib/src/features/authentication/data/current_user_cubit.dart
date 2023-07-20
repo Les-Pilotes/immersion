@@ -119,4 +119,8 @@ class CurrentUserCubit extends Cubit<StudentUser> {
       throw Exception('User not found in the database');
     }
   }
+
+  Future<void> logOutUser() async {
+    await FirebaseRegistrationHelper.logOut();
+  }
 }
