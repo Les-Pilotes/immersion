@@ -6,18 +6,20 @@ import 'package:immersion/src/features/authentication/presentation/screens/welco
 import 'package:immersion/src/utils/extension.dart';
 import 'package:immersion/src/utils/ui_library/button/secondary_button.dart';
 import 'package:immersion/src/utils/ui_library/button/small_primary_button.dart';
+import 'package:immersion/src/utils/ui_library/interface/profile_section.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   static const String routeName = "/home/profile";
 
-  Future<void> logOut(BuildContext context) async {
-    await context.read<CurrentUserCubit>().logOutUser();
-    //if (mounted)
-      navigateToHome(context);
-  }
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
 
+class _ProfileScreenState extends State<ProfileScreen> {
+
+  //region Navigation
   void navigateToHome(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute<WelcomeScreen>(
@@ -26,6 +28,14 @@ class ProfileScreen extends StatelessWidget {
           (route) => false,
     );
   }
+
+  Future<void> logOut(BuildContext context) async {
+    await context.read<CurrentUserCubit>().logOutUser();
+    if (mounted) {
+      navigateToHome(context);
+    }
+  }
+  //endregion
 
   @override
   Widget build(BuildContext context) {
@@ -99,118 +109,6 @@ class ProfileScreen extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class Section extends StatelessWidget {
-  const Section({
-    required this.title,
-    super.key,
-    this.subSections,
-    this.description,
-  });
-
-  final String title;
-  final List<SubSection>? subSections;
-  final String? description;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          color: Colors.grey[200],
-          height: 36,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: const EdgeInsets.only(
-                left: 20,
-              ),
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 0,
-        ),
-        if (subSections != null)
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: subSections!
-                  .map(
-                    (item) => Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 6,
-                      ),
-                      child: SubSection(
-                        text: item.text,
-                        leadingIcon: item.leadingIcon,
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          )
-        else
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              description!,
-              style: const TextStyle(fontSize: 18),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class SubSection extends StatelessWidget {
-  const SubSection({
-    required this.text,
-    super.key,
-    this.leadingIcon,
-  });
-
-  final String text;
-  final IconData? leadingIcon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Row(
-          children: [
-            Icon(
-              leadingIcon,
-              color: Colors.black,
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            Text(
-              text,
-              style: const TextStyle(fontSize: 18),
-            ),
-          ],
-        ),
-        const Icon(
-          Icons.arrow_forward_ios,
-          size: 18,
-          color: Colors.black,
-        ),
-      ],
     );
   }
 }

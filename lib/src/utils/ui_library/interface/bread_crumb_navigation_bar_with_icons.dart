@@ -4,10 +4,7 @@ import 'package:immersion/src/utils/ui_library/text/primary_page_title.dart';
 
 class BreadCrumbNavigationBarIcons extends StatelessWidget {
   const BreadCrumbNavigationBarIcons({
-    super.key,
-    required this.title,
-    required this.firstIcon,
-    required this.secondIcon,
+    required this.title, required this.firstIcon, required this.secondIcon, super.key,
   });
 
   final String title;

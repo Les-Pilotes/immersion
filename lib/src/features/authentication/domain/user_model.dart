@@ -38,7 +38,7 @@ class StudentUser {
   }
 
   factory StudentUser.fromSnapshot(DocumentSnapshot snapshot) {
-    final data = snapshot.data()! as Map<String, dynamic>;
+    //final data = snapshot.data()! as Map<String, dynamic>;
     return StudentUser(
       //id: data['id'] as String,
       id: snapshot.get('id') as String,

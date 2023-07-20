@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:immersion/firebase_options.dart';
 import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/welcome_screen.dart';
