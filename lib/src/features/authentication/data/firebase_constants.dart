@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:immersion/flavors.dart';
 
 class FirestoreString {
   static const String ENV_TEST = "Staging";
@@ -21,8 +22,9 @@ class FirebaseUser {
 
 class FirebasePaths {
   static const String ENV = FirestoreString.ENV_TEST;
-  static const String USER_PATH = "Env/$ENV/User";
-  static const String EVENT_PATH = "Env/$ENV/Event";
+  static String flavorEnv = F.env;
+  static String userPath = "Env/$flavorEnv/User";
+  static String eventPath = "Env/$flavorEnv/Event";
 }
 
 class Strings {

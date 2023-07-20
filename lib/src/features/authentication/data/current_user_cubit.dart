@@ -64,7 +64,7 @@ class CurrentUserCubit extends Cubit<StudentUser> {
       );
 
       final userRef = FirebaseInstances.firebaseFirestoreInstance
-          .collection(FirebasePaths.USER_PATH)
+          .collection(FirebasePaths.userPath)
           .doc(updatedUser.id);
 
       await userRef.set(updatedUser.toMap());
@@ -82,7 +82,7 @@ class CurrentUserCubit extends Cubit<StudentUser> {
 
     if (firebaseUser != null) {
       final userRef = FirebaseInstances.firebaseFirestoreInstance
-          .collection(FirebasePaths.USER_PATH)
+          .collection(FirebasePaths.userPath)
           .doc(firebaseUser.uid);
 
       final userSnapshot = await userRef.get();
@@ -108,7 +108,7 @@ class CurrentUserCubit extends Cubit<StudentUser> {
   Future<void> retrieveUser(String userId) async {
     final DocumentSnapshot snapshot = await FirebaseInstances
         .firebaseFirestoreInstance
-        .collection(FirebasePaths.USER_PATH)
+        .collection(FirebasePaths.userPath)
         .doc(userId)
         .get();
 

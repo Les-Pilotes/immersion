@@ -26,7 +26,6 @@ class SignUpRegistrationScreen extends StatefulWidget {
 class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
   //region Variables
   final _formKey = GlobalKey<FormState>();
-  final Key _emailKey = const Key('textFieldEmailKey');
   late final TextEditingController _firstNameController;
   late final TextEditingController _lastNameController;
   late final TextEditingController _emailController;
@@ -258,7 +257,7 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                             children: [
                               PilotesInputField(
                                 fieldHintText: "Prénom",
-                                key: _emailKey,
+                                key: const Key("emailPilotesInputField"),
                                 fieldName: 'firstName',
                                 controller: _firstNameController,
                                 currentNode: _focusFirstName,

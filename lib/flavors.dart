@@ -19,4 +19,15 @@ class F {
     }
   }
 
+  static String get env {
+    switch (appFlavor) {
+      case Flavor.prod:
+        return 'Staging'; // replace by "Release" when ready
+      case Flavor.dev:
+        return 'Staging';
+      default:
+        return 'title';
+    }
+  }
+
 }

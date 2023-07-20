@@ -24,7 +24,7 @@ class FirebaseEventList extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseInstances.firebaseFirestoreInstance
-          .collection(FirebasePaths.EVENT_PATH)
+          .collection(FirebasePaths.eventPath)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
