@@ -6,10 +6,10 @@ import 'package:immersion/src/features/authentication/domain/student_user_model.
 import 'package:immersion/src/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_registration.dart';
 import 'package:immersion/src/features/home/presentation/home_navigation_screen.dart';
+import 'package:immersion/src/utils/constants.dart';
 import 'package:immersion/src/utils/styles.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
 import 'package:immersion/src/utils/ui_library/button/secondary_button.dart';
-import 'package:immersion/src/utils/ui_library/images/welcome_image_clipper.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -72,57 +72,53 @@ class WelcomeScreen extends StatelessWidget {
       child: Scaffold(
         body: Column(
           children: [
-            Expanded(
-              flex: 1,
-              child: Stack(
-                children: [
-                  CustomShapeImage(
-                    child: Transform.scale(
-                      scale: 1.35,
-                      child: Image.asset(
-                        'assets/images/immersion_mla.png',
-                        //fit: BoxFit.fill,
-                      ),
-                    ),
+            Stack(
+              children: [
+                //CustomShapeImage(
+                //child: Transform.scale(scale: 1.65, child:
+                Image.asset(
+                  'assets/images/immersion_mla.png',
+                  fit: BoxFit.fill,
+                ),
+                //),
+                //),
+                Positioned(
+                  top: 60,
+                  right: 30,
+                  bottom: 0,
+                  child: Image.asset(
+                    'assets/logo/app_prod_icon.png',
+                    width: 150,
+                    height: 150,
+                    alignment: Alignment.center,
                   ),
-                  Positioned(
-                    top: 180,
-                    right: 30,
-                    bottom: 0,
-                    child: Image.asset(
-                      'assets/logo/app_prod_icon.png',
-                      width: 150,
-                      height: 150,
-                      alignment: Alignment.center,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
             Expanded(
-              flex: 2,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Expanded(
+                  Expanded(
                     flex: 3,
                     child: Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Les Pilotes",
                             style: TextStyle(
                               fontSize: 34,
                               fontWeight: FontWeight.w800,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
                           Text(
-                            "Explorez de nouvelles opportunités, \ndéveloppez vos compétences et connectez-vous avec des professionnels grâce à notre application dédiée à l'emploi et à l'éducation.",
+                            introWelcomeText,
                             style: pageSubtitleStyle,
                           ),
                         ],
