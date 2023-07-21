@@ -6,6 +6,7 @@ import 'package:immersion/src/features/authentication/domain/student_user_model.
 import 'package:immersion/src/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_registration.dart';
 import 'package:immersion/src/features/home/presentation/home_navigation_screen.dart';
+import 'package:immersion/src/utils/styles.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
 import 'package:immersion/src/utils/ui_library/button/secondary_button.dart';
 import 'package:immersion/src/utils/ui_library/images/welcome_image_clipper.dart';
@@ -122,13 +123,7 @@ class WelcomeScreen extends StatelessWidget {
                           ),
                           Text(
                             "Explorez de nouvelles opportunités, \ndéveloppez vos compétences et connectez-vous avec des professionnels grâce à notre application dédiée à l'emploi et à l'éducation.",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Color(0xFF48484A),
-                              letterSpacing: 0.5,
-                              wordSpacing: 2,
-                              height: 1.3,
-                            ),
+                            style: pageSubtitleStyle,
                           ),
                         ],
                       ),

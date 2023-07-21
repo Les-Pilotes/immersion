@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:immersion/src/features/authentication/domain/student_preferences.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_preferences.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
 import 'package:immersion/src/utils/ui_library/misc/number_circle.dart';
