@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_in_screen.dart';
-import 'package:immersion/src/features/authentication/presentation/screens/sign_up_registration.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/welcome_screen.dart';
 import 'package:immersion/src/utils/constants.dart';
 
@@ -96,6 +95,6 @@ void main() {
 
       expect(find.byType(SignInScreen), findsOneWidget);
     });
-    */
   });
+    */
 }
