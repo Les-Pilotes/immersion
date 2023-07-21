@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:immersion/src/features/immersion/domain/event_model.dart';
 import 'package:immersion/src/utils/styles.dart';
@@ -140,11 +141,13 @@ class EventCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  event.imageUrl,
+                child: CachedNetworkImage(
+                  imageUrl: event.imageUrl,
                   fit: BoxFit.cover,
                   height: 170,
                   width: double.infinity,
+                  placeholder: (context, url) => const Center(child: SizedBox(height: 60, width: 60, child: CircularProgressIndicator())),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
               Positioned(

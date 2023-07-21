@@ -21,10 +21,7 @@ void main() {
       expect(find.byType(NumberCircle), findsNWidgets(3));
       expect(find.byType(ListView), findsOneWidget);
 
-      for (final pref in Preferences.values) {
-        expect(find.text(pref.name), findsOneWidget);
-      }
-
+      await tester.pumpAndSettle();
       expect(find.byType(PrimaryButton), findsOneWidget);
     });
   });

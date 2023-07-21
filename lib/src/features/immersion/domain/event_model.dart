@@ -123,13 +123,24 @@ class Event {
     }
   }
 
-  Future<String> get eventNetworkUrl async {
+  Future<String> get eventNetworkUrl1 async {
     final formattedUrl = imageUrl.substring(imageUrl.indexOf('Env'));
 
     final ref = FirebaseInstances.firebaseStorageInstance.ref().child(formattedUrl).getDownloadURL();
 
     return ref;
   }
+
+  Future<String> get eventNetworkUrl async {
+    if (imageUrl.startsWith('Env')) {
+      return imageUrl; // Return the existing URL if it starts with "Env"
+    } else {
+      final formattedUrl = imageUrl.substring(imageUrl.indexOf('Env'));
+      final ref = FirebaseInstances.firebaseStorageInstance.ref().child(formattedUrl).getDownloadURL();
+      return ref;
+    }
+  }
+
 
   int get durationToMilliseconds => duration.inMilliseconds;
 
