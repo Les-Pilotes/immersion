@@ -193,7 +193,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                             return Column(
                               children: [
                                 RadioListTile<Gender>(
-                                  title: const Text('Garçon'),
+                                  title: Text(Gender.male.name),
                                   value: Gender.male,
                                   groupValue: _selectedGender,
                                   onChanged: (value) {
@@ -203,7 +203,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                   },
                                 ),
                                 RadioListTile<Gender>(
-                                  title: const Text('Fille'),
+                                  title: Text(Gender.female.name),
                                   value: Gender.female,
                                   groupValue: _selectedGender,
                                   onChanged: (value) {
@@ -223,7 +223,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                             return Column(
                               children: [
                                 RadioListTile<SchoolLevel>(
-                                  title: const Text('Collège'),
+                                  title: Text(SchoolLevel.college.name),
                                   value: SchoolLevel.college,
                                   groupValue: _selectedSchoolLevel,
                                   onChanged: (value) {
@@ -233,7 +233,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                   },
                                 ),
                                 RadioListTile<SchoolLevel>(
-                                  title: const Text('Lycée'),
+                                  title: Text(SchoolLevel.highSchool.name),
                                   value: SchoolLevel.highSchool,
                                   groupValue: _selectedSchoolLevel,
                                   onChanged: (value) {
@@ -243,7 +243,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                   },
                                 ),
                                 RadioListTile<SchoolLevel>(
-                                  title: const Text('Études supérieures'),
+                                  title: Text(SchoolLevel.higherEducation.name),
                                   value: SchoolLevel.higherEducation,
                                   groupValue: _selectedSchoolLevel,
                                   onChanged: (value) {
@@ -253,7 +253,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                   },
                                 ),
                                 RadioListTile<SchoolLevel>(
-                                  title: const Text('Autres'),
+                                  title: Text(SchoolLevel.other.name),
                                   value: SchoolLevel.other,
                                   groupValue: _selectedSchoolLevel,
                                   onChanged: (value) {

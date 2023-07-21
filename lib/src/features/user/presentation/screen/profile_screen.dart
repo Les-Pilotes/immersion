@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
-import 'package:immersion/src/features/authentication/domain/user_model.dart';
+import 'package:immersion/src/features/authentication/domain/student_user_model.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/welcome_screen.dart';
 import 'package:immersion/src/utils/extension.dart';
 import 'package:immersion/src/utils/ui_library/button/secondary_button.dart';

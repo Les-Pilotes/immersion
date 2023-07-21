@@ -56,4 +56,16 @@ void main() {
     expect(find.byType(HomeScreen), findsNothing);
     expect(find.byType(SignInScreen), findsOneWidget);
   });
+
+  // TODO(amadoug2g): group 'Widget test'
+  // TODO(amadoug2g): test 'Widget displaying'
+
+  // TODO(amadoug2g): sub-group 'Form test'
+  // TODO(amadoug2g): test 'Email not registered'
+  // TODO(amadoug2g): test 'Fields empty'
+  // TODO(amadoug2g): test 'Wrong password'
+
+  // TODO(amadoug2g): group 'Navigation test'
+  // TODO(amadoug2g): test 'Navigating to home'
+  // TODO(amadoug2g): test 'Navigating to registration sign up'
 }

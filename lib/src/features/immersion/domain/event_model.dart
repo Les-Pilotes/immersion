@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:immersion/src/features/authentication/data/firebase_constants.dart';
 import 'package:immersion/src/utils/extension.dart';
 import 'package:intl/intl.dart';
 
@@ -23,8 +24,8 @@ class Event {
     final String eventAddress = snapshot.get('address') as String;
     final String eventImageUrl = snapshot.get('imageUrl') as String;
     final DateTime eventDate = (snapshot.get('eventDate') as Timestamp).toDate();
-    final EventType eventType = Event.getEventTypeFromString(snapshot.get('eventType') as String);
-    const Duration eventDuration = Duration(minutes: 60); // Set the actual duration based on your logic
+    final EventType eventType = getEventTypeFromString(snapshot.get('eventType') as String);
+    final Duration eventDuration = getDuration(snapshot.get('duration') as String);
     final double eventLat = snapshot.get('lat') as double;
     final double eventLng = snapshot.get('lng') as double;
     final String eventOrganizerName = snapshot.get('organizerName') as String;
@@ -54,6 +55,7 @@ class Event {
   double lat;
   double lng;
   String organizerName;
+  String? videoUrl;
 
   String get eventTimeRange {
     final DateTime endTime = eventDate.add(duration);
@@ -93,6 +95,13 @@ class Event {
     return duration;
   }
 
+  static Duration getDuration(String eventDuration) {
+    final int durationInMillis = int.parse(eventDuration);
+    final Duration duration = Duration(milliseconds: durationInMillis);
+
+    return duration;
+  }
+
   static EventType getEventTypeFromString(String eventTypeString) {
     switch (eventTypeString) {
       case 'immersion':
@@ -114,8 +123,41 @@ class Event {
     }
   }
 
+  Future<String> get eventNetworkUrl async {
+    final formattedUrl = imageUrl.substring(imageUrl.indexOf('Env'));
+
+    final ref = FirebaseInstances.firebaseStorageInstance.ref().child(formattedUrl).getDownloadURL();
+
+    return ref;
+  }
 
   int get durationToMilliseconds => duration.inMilliseconds;
+
+  Event copyWith({
+    String? title,
+    String? address,
+    String? imageUrl,
+    DateTime? eventDate,
+    EventType? eventType,
+    Duration? duration,
+    double? lat,
+    double? lng,
+    String? organizerName,
+    String? description,
+  }) {
+    return Event(
+      title: title ?? this.title,
+      address: address ?? this.address,
+      imageUrl: imageUrl ?? this.imageUrl,
+      eventDate: eventDate ?? this.eventDate,
+      eventType: eventType ?? this.eventType,
+      duration: duration ?? this.duration,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
+      organizerName: organizerName ?? this.organizerName,
+      description: description ?? this.description,
+    );
+  }
 }
 
 enum EventType {

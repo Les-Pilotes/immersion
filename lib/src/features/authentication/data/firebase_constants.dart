@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:immersion/flavors.dart';
 
 class FirestoreString {
@@ -14,6 +15,7 @@ class FirebaseInstances {
   static final FirebaseFirestore firebaseFirestoreInstance =
       FirebaseFirestore.instance;
   static final FirebaseAuth firebaseAuthInstance = FirebaseAuth.instance;
+  static final FirebaseStorage firebaseStorageInstance = FirebaseStorage.instance;
 }
 
 class FirebaseUser {

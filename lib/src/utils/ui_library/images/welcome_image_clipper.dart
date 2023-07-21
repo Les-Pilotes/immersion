@@ -7,7 +7,7 @@ class CustomShapeClipper extends CustomClipper<Path> {
     debugPrint("Path");
 
     path..lineTo(0, size.height) // Start at top left
-      ..lineTo(0, size.height - 50);
+      ..lineTo(0, size.height - 150);
 
     debugPrint("Path");
 

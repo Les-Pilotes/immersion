@@ -140,8 +140,8 @@ class EventCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  'assets/images/immersion_powder.jpg',
+                child: Image.network(
+                  event.imageUrl,
                   fit: BoxFit.cover,
                   height: 170,
                   width: double.infinity,

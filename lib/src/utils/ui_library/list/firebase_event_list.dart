@@ -39,11 +39,24 @@ class FirebaseEventList extends StatelessWidget {
 
         final List<Widget> eventCards = documents.map((document) {
           final Event event = Event.fromDocumentSnapshot(document);
-          return EventCard(
-            onPressed: () {
-              navigateToEventDetails(context, event);
+
+          return FutureBuilder<String>(
+            future: event.eventNetworkUrl,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return const Text('Error loading image');
+              } else {
+                event.imageUrl = snapshot.data ?? '';
+                return EventCard(
+                  onPressed: () {
+                    navigateToEventDetails(context, event);
+                  },
+                  event: event,
+                );
+              }
             },
-            event: event,
           );
         }).toList();
 
@@ -56,5 +69,6 @@ class FirebaseEventList extends StatelessWidget {
         );
       },
     );
+
   }
 }
