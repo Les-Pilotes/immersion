@@ -8,7 +8,7 @@ import 'package:immersion/src/utils/ui_library/text/pilotes_input_field.dart';
 import 'package:immersion/src/utils/ui_library/text/suggestion_subtitle.dart';
 
 void main() {
-  testWidgets('Sign In all widgets', (tester) async {
+  testWidgets('Sign In show all widgets', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         home: SignInScreen(),
@@ -58,7 +58,6 @@ void main() {
   });
 
   // TODO(amadoug2g): group 'Widget test'
-  // TODO(amadoug2g): test 'Widget displaying'
 
   // TODO(amadoug2g): sub-group 'Form test'
   // TODO(amadoug2g): test 'Email not registered'

@@ -19,9 +19,24 @@ void main() {
       expect(find.byType(PrimaryPageTitle), findsOneWidget);
       expect(find.byType(NumberCircle), findsNWidgets(3));
       expect(find.byType(ListView), findsOneWidget);
+      expect(find.byType(PrimaryButton), findsOneWidget);
+    });
+  });
+
+  group('Form test', () {
+    testWidgets('Error dialog on empty selection', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: SignUpPreferenceScreen(
+            password: '',
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(PrimaryButton));
 
       await tester.pumpAndSettle();
-      expect(find.byType(PrimaryButton), findsOneWidget);
+      expect(find.byType(AlertDialog), findsOneWidget);
     });
   });
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
 import 'package:immersion/src/features/authentication/data/firebase_registration_helper.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_registration.dart';
 import 'package:immersion/src/features/home/presentation/home_navigation_screen.dart';
+import 'package:immersion/src/features/user/data/current_user_cubit.dart';
+import 'package:immersion/src/utils/constants.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
 import 'package:immersion/src/utils/ui_library/text/pilotes_input_field.dart';
 import 'package:immersion/src/utils/ui_library/text/primary_page_title.dart';
@@ -13,7 +14,7 @@ import 'package:immersion/src/utils/ui_library/text/suggestion_subtitle.dart';
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
-  static const String routeName = "/signIn";
+  static const String routeName = AppRoutes.routeNameSignIn;
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -67,11 +68,11 @@ class _SignInScreenState extends State<SignInScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Erreur de connexion'),
+          title: Text(signInErrorText),
           content: Text(e),
           actions: [
             TextButton(
-              child: const Text('OK'),
+              child: Text(confirmationText),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -129,18 +130,18 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const PrimaryPageTitle(
-                                title: "Connexion",
+                              PrimaryPageTitle(
+                                title: signInButtonText,
                               ),
                               Container(
                                 height: 22,
                               ),
-                              const Text("Connecte-toi à ton compte"),
+                              Text(signInSubtitleText),
                               Container(
                                 height: 79,
                               ),
                               PilotesInputField(
-                                fieldHintText: "Adresse mail",
+                                fieldHintText: signInEmailText,
                                 fieldName: 'email',
                                 controller: _emailController,
                                 currentNode: _focusEmail,
@@ -155,7 +156,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 height: 24,
                               ),
                               PilotesInputField(
-                                fieldHintText: "Mot de passe",
+                                fieldHintText: signInPasswordText,
                                 fieldName: 'password',
                                 fieldIcon:
                                     const Icon(Icons.info_outline_rounded),
@@ -183,7 +184,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     builder: (context, snapshot) {
                       if (signInFuture == null || snapshot.connectionState == ConnectionState.done) {
                         return PrimaryButton(
-                          text: "Se connecter",
+                          text: signInText,
                           onPressed: () async {
                             if (_formKey.currentState?.validate() ?? false) {
                               setState(() {
@@ -199,8 +200,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     },
                   ),
                   SuggestionSubtitle(
-                    firstText: 'Pas de compte ?',
-                    secondText: 'Inscris-toi',
+                    firstText: signInNoAccountText1,
+                    secondText: signInNoAccountText2,
                     onPressed: () => navigateToSignUp(context),
                   ),
                 ],

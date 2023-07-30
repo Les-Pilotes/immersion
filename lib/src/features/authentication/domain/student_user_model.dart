@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:immersion/src/features/authentication/domain/gender.dart';
 import 'package:immersion/src/features/authentication/domain/school_level.dart';
-import 'package:immersion/src/features/immersion/domain/event_model.dart';
 import 'package:immersion/src/utils/extension.dart';
 
 class StudentUser {
@@ -90,8 +89,8 @@ class StudentUser {
   DateTime? dateOfBirth;
   List<String>? devices;
   List<String>? preferences;
-  List<Event>? favoriteEvents;
-  List<Event>? participationEvents;
+  List<String>? favoriteEvents;
+  List<String>? participationEvents;
   DateTime createdDate = DateTime.now();
 
   // TODO(amadoug2g): Add sub-collections for favorites and participation, or id lists for each
@@ -168,8 +167,8 @@ class StudentUser {
     DateTime? createdDate,
     List<String>? devices,
     List<String>? preferences,
-    List<Event>? favoriteEvents,
-    List<Event>? participationEvents,
+    List<String>? favoriteEvents,
+    List<String>? participationEvents,
   }) {
     return StudentUser(
       id: id ?? this.id,

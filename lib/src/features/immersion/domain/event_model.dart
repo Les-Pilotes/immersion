@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 class Event {
   Event({
+    required this.id,
     required this.title,
     required this.address,
     required this.imageUrl,
@@ -19,7 +20,7 @@ class Event {
   });
 
   factory Event.fromDocumentSnapshot(DocumentSnapshot snapshot) {
-    //final String eventId = snapshot.id;
+    final String eventId = snapshot.id;
     final String eventName = snapshot.get('title') as String;
     final String eventAddress = snapshot.get('address') as String;
     final String eventImageUrl = snapshot.get('imageUrl') as String;
@@ -31,6 +32,7 @@ class Event {
     final String eventOrganizerName = snapshot.get('organizerName') as String;
 
     return Event(
+      id: eventId,
       title: eventName,
       address: eventAddress,
       imageUrl: eventImageUrl,
@@ -43,7 +45,7 @@ class Event {
     );
   }
 
-  final String id = "";
+  String id = "";
   String title;
   String description;
   final EventType eventType;
@@ -55,6 +57,7 @@ class Event {
   double lat;
   double lng;
   String organizerName;
+  List<String>? participantList = [];
   String? videoUrl;
 
   String get eventTimeRange {
@@ -144,6 +147,7 @@ class Event {
   int get durationToMilliseconds => duration.inMilliseconds;
 
   Event copyWith({
+    String? id,
     String? title,
     String? address,
     String? imageUrl,
@@ -156,6 +160,7 @@ class Event {
     String? description,
   }) {
     return Event(
+      id: id ?? this.id,
       title: title ?? this.title,
       address: address ?? this.address,
       imageUrl: imageUrl ?? this.imageUrl,

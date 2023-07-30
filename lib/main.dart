@@ -1,13 +1,15 @@
 import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:immersion/firebase_options.dart';
-import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/welcome_screen.dart';
 import 'package:immersion/src/features/home/presentation/home_navigation_screen.dart';
+import 'package:immersion/src/features/user/data/current_user_cubit.dart';
+import 'package:immersion/src/utils/constants.dart';
 
 FutureOr<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +34,7 @@ FutureOr<void> main() async {
           GlobalCupertinoLocalizations.delegate,
           FormBuilderLocalizations.delegate,
         ],
-        title: 'Immersion',
+        title: appTitleText,
         debugShowCheckedModeBanner: false,
         initialRoute: WelcomeScreen.routeName,
         onGenerateRoute: (settings) {

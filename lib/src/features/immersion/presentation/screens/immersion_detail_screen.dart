@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:immersion/src/features/immersion/data/firebase_event_helper.dart';
 import 'package:immersion/src/features/immersion/domain/event_model.dart';
+import 'package:immersion/src/features/user/data/current_user_cubit.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
 import 'package:immersion/src/utils/ui_library/interface/bread_crumb_navigation_bar_with_icons.dart';
 
-class ImmersionDetailScreen extends StatelessWidget {
+class ImmersionDetailScreen extends StatefulWidget {
   const ImmersionDetailScreen({
     required this.event,
     super.key,
@@ -14,7 +17,37 @@ class ImmersionDetailScreen extends StatelessWidget {
 
   final Event event;
 
-  void joinEvent() {
+  @override
+  State<ImmersionDetailScreen> createState() => _ImmersionDetailScreenState();
+}
+
+class _ImmersionDetailScreenState extends State<ImmersionDetailScreen> {
+  bool _isParticipant = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkUserParticipationStatus();
+  }
+
+  Future<void> _checkUserParticipationStatus() async {
+    final eventId = widget.event.id;
+
+    try {
+      final isParticipant =
+          await FirebaseEventHelper().isUserParticipant(eventId);
+
+      setState(() {
+        _isParticipant = isParticipant;
+      });
+    } on EventException catch (e) {
+      displayErrorMessage(e.message);
+    } catch (error) {
+      displayErrorMessage(error.toString());
+    }
+  }
+
+  void joinEventSuccess() {
     Fluttertoast.showToast(
       msg: "Inscris à l'immersion",
       toastLength: Toast.LENGTH_SHORT,
@@ -23,6 +56,70 @@ class ImmersionDetailScreen extends StatelessWidget {
       backgroundColor: Colors.red,
       textColor: Colors.white,
       fontSize: 16,
+    );
+  }
+
+  void leaveEventSuccess() {
+    Fluttertoast.showToast(
+      msg: "Désinscris de l'immersion",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16,
+    );
+  }
+
+  void _handleJoinEvent() {
+    if (_isParticipant) {
+      try {
+        FirebaseEventHelper().removeParticipantFromEvent(
+          widget.event.id,
+          BlocProvider.of<CurrentUserCubit>(context).state.id,
+        );
+        leaveEventSuccess();
+      } on EventException catch (e) {
+        displayErrorMessage(e.message);
+      } catch (error) {
+        displayErrorMessage(error.toString());
+      }
+    } else {
+      try {
+        FirebaseEventHelper().addParticipantToEvent(
+          widget.event.id,
+          BlocProvider.of<CurrentUserCubit>(context).state.id,
+        );
+        joinEventSuccess();
+      } on EventException catch (e) {
+        displayErrorMessage(e.message);
+      } catch (error) {
+        displayErrorMessage(error.toString());
+      }
+    }
+
+    setState(() {
+      _isParticipant = !_isParticipant;
+    });
+  }
+
+  void displayErrorMessage(String e) {
+    showDialog<AlertDialog>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Erreur de participation'),
+          content: Text('Une erreur est survenue: $e'),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -52,7 +149,7 @@ class ImmersionDetailScreen extends StatelessWidget {
                       ),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(event.imageUrl),
+                        child: Image.asset(widget.event.imageUrl),
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -62,13 +159,13 @@ class ImmersionDetailScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                event.title,
+                                widget.event.title,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 30,
                                 ),
                               ),
-                              Text("par ${event.organizerName}"),
+                              Text("par ${widget.event.organizerName}"),
                             ],
                           ),
                           Stack(
@@ -88,7 +185,8 @@ class ImmersionDetailScreen extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        event.eventMonthShort.toUpperCase(),
+                                        widget.event.eventMonthShort
+                                            .toUpperCase(),
                                         style: const TextStyle(
                                           fontSize: 14,
                                           letterSpacing: 2,
@@ -96,7 +194,7 @@ class ImmersionDetailScreen extends StatelessWidget {
                                       ),
                                       Text(
                                         //"04",
-                                        event.eventDayNumber,
+                                        widget.event.eventDayNumber,
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w900,
@@ -119,7 +217,7 @@ class ImmersionDetailScreen extends StatelessWidget {
                               const Icon(Icons.location_on_rounded, size: 12),
                               const SizedBox(width: 4),
                               Text(
-                                event.address,
+                                widget.event.address,
                                 style: const TextStyle(
                                   fontSize: 12,
                                 ),
@@ -135,7 +233,7 @@ class ImmersionDetailScreen extends StatelessWidget {
                               const Icon(Icons.access_time, size: 12),
                               const SizedBox(width: 4),
                               Text(
-                                event.eventTimeRange,
+                                widget.event.eventTimeRange,
                                 style: const TextStyle(
                                   fontSize: 12,
                                 ),
@@ -154,7 +252,7 @@ class ImmersionDetailScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        event.description,
+                        widget.event.description,
                         textAlign: TextAlign.justify,
                         style: const TextStyle(
                           fontSize: 12,
@@ -165,7 +263,7 @@ class ImmersionDetailScreen extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: Image.asset(
-                          'asset/images/google_map_prop.png',
+                          'assets/images/google_map_prop.png',
                           fit: BoxFit.cover,
                           height: 190,
                           width: 360,
@@ -179,8 +277,8 @@ class ImmersionDetailScreen extends StatelessWidget {
             Column(
               children: [
                 PrimaryButton(
-                  text: "Rejoindre",
-                  onPressed: () => joinEvent(),
+                  text: _isParticipant ? "Quitter" : "Rejoindre",
+                  onPressed: () => _handleJoinEvent(),
                 ),
                 const SizedBox(height: 40),
               ],

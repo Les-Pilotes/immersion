@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:immersion/src/features/authentication/data/current_user_cubit.dart';
 import 'package:immersion/src/features/authentication/data/firebase_constants.dart';
 import 'package:immersion/src/features/authentication/data/firebase_registration_helper.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_informations.dart';
+import 'package:immersion/src/features/user/data/current_user_cubit.dart';
+import 'package:immersion/src/utils/constants.dart';
 import 'package:immersion/src/utils/styles.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
 import 'package:immersion/src/utils/ui_library/misc/number_circle.dart';
@@ -16,7 +17,7 @@ import 'package:immersion/src/utils/ui_library/text/suggestion_subtitle.dart';
 class SignUpRegistrationScreen extends StatefulWidget {
   const SignUpRegistrationScreen({super.key});
 
-  static const String routeName = "/signUp";
+  static const String routeName = AppRoutes.routeNameSignUp;
 
   @override
   State<SignUpRegistrationScreen> createState() =>
@@ -97,8 +98,7 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
 
       return signInMethods.isEmpty;
     } catch (e) {
-      //displayEmailErrorMessage(e.toString());
-      debugPrint('An error occurred: $e');
+      displayEmailErrorMessage(e.toString());
       return false;
     }
   }
@@ -108,11 +108,11 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Adresse email'),
-          content: Text('Une erreur est survenue: $e'),
+          title: Text(signInEmailText),
+          content: Text('$signUpOccurredErrorText: $e'),
           actions: [
             TextButton(
-              child: const Text('OK'),
+              child: Text(confirmationText),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
@@ -128,20 +128,20 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Email déjà utilisée'),
-          content: const Text(
-            'Cette adresse est déjà associée à un compte, essayez de vous connecter.',
+          title: Text(signUpEmailInUseText),
+          content: Text(
+            signUpEmailInUseText,
           ),
           actions: [
             TextButton(
-              child: const Text('Se connecter'),
+              child: Text(signInText),
               onPressed: () {
                 Navigator.of(context).pop();
                 navigateToSignIn(context);
               },
             ),
             TextButton(
-              child: const Text('Réessayer'),
+              child: Text(signUpRetryText),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
@@ -208,13 +208,13 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             PrimaryPageTitle(
-                              title: "Inscription",
+                              title: signUpButtonText,
                             ),
-                            Expanded(
+                            const Expanded(
                               flex: 1,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -247,7 +247,7 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                         Container(
                           height: 22,
                         ),
-                        const Text("Créé ton compte"),
+                        Text(signUpSubtitleText),
                         Container(
                           height: 40,
                         ),
@@ -256,8 +256,7 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                           child: Column(
                             children: [
                               PilotesInputField(
-                                fieldHintText: "Prénom",
-                                key: const Key("emailPilotesInputField"),
+                                fieldHintText: signUpFirstNameText,
                                 fieldName: 'firstName',
                                 controller: _firstNameController,
                                 currentNode: _focusFirstName,
@@ -269,7 +268,7 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                                 height: 24,
                               ),
                               PilotesInputField(
-                                fieldHintText: "Nom",
+                                fieldHintText: signUpLastNameText,
                                 fieldName: 'lastName',
                                 controller: _lastNameController,
                                 currentNode: _focusLastName,
@@ -281,7 +280,7 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                                 height: 22,
                               ),
                               PilotesInputField(
-                                fieldHintText: "Adresse mail",
+                                fieldHintText: signInEmailText,
                                 fieldName: 'email',
                                 controller: _emailController,
                                 currentNode: _focusEmail,
@@ -296,7 +295,7 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                                 height: 24,
                               ),
                               PilotesInputField(
-                                fieldHintText: "Mot de passe",
+                                fieldHintText: signInPasswordText,
                                 fieldName: "password",
                                 fieldIcon: const Icon(
                                   Icons.remove_red_eye_rounded,
@@ -315,7 +314,7 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                                 height: 24,
                               ),
                               PilotesInputField(
-                                fieldHintText: "Confirmation mot de passe",
+                                fieldHintText: signUpConfirmPasswordText,
                                 fieldName: 'confirmPassword',
                                 fieldIcon: const Icon(
                                   Icons.remove_red_eye_rounded,
@@ -329,7 +328,7 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                                     FormBuilderValidators.required(),
                                     (val) {
                                       if (val != _passwordController.text) {
-                                        return 'Les mots de passe ne correspondent pas';
+                                        return signUpPasswordNotMatchingText;
                                       }
                                       return null;
                                     },
@@ -352,7 +351,7 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                       if (signUpFuture == null ||
                           snapshot.connectionState == ConnectionState.done) {
                         return PrimaryButton(
-                          text: 'Suivant',
+                          text: 'signUpNextText',
                           onPressed: () async {
                             if (validateForm() && await isEmailAvailable()) {
                               if (mounted) {
@@ -370,8 +369,8 @@ class _SignUpRegistrationScreenState extends State<SignUpRegistrationScreen> {
                     },
                   ),
                   SuggestionSubtitle(
-                    firstText: 'Déjà inscrit ?',
-                    secondText: 'Connecte-toi',
+                    firstText: signUpNoAccountText1,
+                    secondText: signUpNoAccountText2,
                     onPressed: () => navigateToSignIn(context),
                   ),
                 ],

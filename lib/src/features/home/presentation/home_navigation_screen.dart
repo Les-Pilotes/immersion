@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:immersion/src/features/home/presentation/home_screen.dart';
 import 'package:immersion/src/features/user/presentation/screen/profile_screen.dart';
+import 'package:immersion/src/utils/constants.dart';
 
 class HomeNavigationScreen extends StatefulWidget {
   const HomeNavigationScreen({super.key});
 
-  static const String routeName = "/home";
+  static const String routeName = AppRoutes.routeNameHome;
 
   @override
   State<HomeNavigationScreen> createState() => _HomeNavigationScreenState();
@@ -37,15 +38,15 @@ class _HomeNavigationScreenState extends State<HomeNavigationScreen> {
         iconSize: 30,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Accueil',
+            icon: const Icon(Icons.home),
+            label: homeMenuText,
           ),
-          //BottomNavigationBarItem(icon: Icon(Icons.assistant), label: 'Assistant',),
+          //BottomNavigationBarItem(icon: const Icon(Icons.assistant), label: assistantMenuText,),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle_rounded),
-            label: 'Profil',
+            icon: const Icon(Icons.account_circle_rounded),
+            label: profileMenuText,
           ),
         ],
         currentIndex: _selectedIndex,
