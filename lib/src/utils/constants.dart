@@ -42,5 +42,6 @@ class AppRoutes {
   static const String routeNameSignIn = "/signIn";
   static const String routeNameSignUp = "/signUp";
   static const String routeNameHome = "/home";
+  static const String routeImmersionDetail = "/home/details";
 }
 //endregion

@@ -9,7 +9,6 @@ import 'package:immersion/src/utils/ui_library/text/suggestion_subtitle.dart';
 
 void main() {
   testWidgets('Registration displaying fields and buttons', (tester) async {
-    // Build our SignUpRegistrationScreen with a MaterialApp
     await tester.pumpWidget(
       const MaterialApp(
         home: SignUpRegistrationScreen(),

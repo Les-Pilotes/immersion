@@ -43,7 +43,7 @@ class AgendaEventList extends StatelessWidget {
         for (final document in documents) {
           final Event event = Event.fromDocumentSnapshot(document);
           final String formattedDate = event
-              .formattedDate;
+              .longFormattedDateWithYear;
 
           if (!eventsByDate.containsKey(formattedDate)) {
             eventsByDate[formattedDate] = [];

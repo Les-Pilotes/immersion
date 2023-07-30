@@ -4,15 +4,13 @@ import 'package:immersion/src/features/immersion/presentation/screens/immersion_
 import 'package:immersion/src/utils/constants.dart';
 import 'package:immersion/src/utils/styles.dart';
 import 'package:immersion/src/utils/ui_library/interface/simple_search_bar.dart';
-import 'package:immersion/src/utils/ui_library/list/article_carousel.dart';
-import 'package:immersion/src/utils/ui_library/list/article_tile.dart';
 import 'package:immersion/src/utils/ui_library/list/event_carousel.dart';
 import 'package:immersion/src/utils/ui_library/text/primary_page_title.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  static const String routeName = "/home";
+  static const String routeName = AppRoutes.routeNameHome;
 
   void navigateToEventCalendar(BuildContext context) {
     Navigator.of(context).push(
@@ -21,24 +19,6 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-  /*
-  void navigateToMessages(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ListMessageScreen(),
-      ),
-    );
-  }
-
-  void navigateToNews(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ListMessageScreen(),
-      ),
-    );
-  }
-  */
 
   void navigateToAgenda(BuildContext context) {
     Navigator.of(context).push(
@@ -50,6 +30,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /*
     final List<ArticleTile> articleTitles = [
       const ArticleTile(
         title: "Titre de l'article",
@@ -88,6 +69,7 @@ class HomeScreen extends StatelessWidget {
         theme: "Theme",
       ),
     ];
+    */
 
     return Column(
       children: [
@@ -127,7 +109,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        Visibility(
+        /*Visibility(
           visible: false,
           child: Expanded(
             child: Padding(
@@ -156,7 +138,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-        ),
+        ),*/
       ],
     );
   }

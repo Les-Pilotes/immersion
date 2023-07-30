@@ -47,8 +47,10 @@ dependencies:
   flutter_sticky_header: ^0.6.5
   fluttertoast: ^8.2.2
   form_builder_validators: ^9.0.0
+  google_maps_flutter: ^2.4.0
   intl: 0.18.0
   table_calendar: ^3.0.9
+  youtube_player_flutter: ^8.1.2
 
 dev_dependencies:
   flutter_flavorizr: ^2.2.1

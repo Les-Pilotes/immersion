@@ -1,9 +1,13 @@
+import 'dart:async';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:immersion/src/features/immersion/data/firebase_event_helper.dart';
 import 'package:immersion/src/features/immersion/domain/event_model.dart';
 import 'package:immersion/src/features/user/data/current_user_cubit.dart';
+import 'package:immersion/src/utils/constants.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
 import 'package:immersion/src/utils/ui_library/interface/bread_crumb_navigation_bar_with_icons.dart';
 
@@ -13,7 +17,7 @@ class ImmersionDetailScreen extends StatefulWidget {
     super.key,
   });
 
-  static const String routeName = "/home/details";
+  static const String routeName = AppRoutes.routeImmersionDetail;
 
   final Event event;
 
@@ -24,10 +28,16 @@ class ImmersionDetailScreen extends StatefulWidget {
 class _ImmersionDetailScreenState extends State<ImmersionDetailScreen> {
   bool _isParticipant = false;
 
+  //late final LatLng eventLocation;
+  //final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
+
+  //static const CameraPosition _kGooglePlex = CameraPosition(target: LatLng(37.42796133580664, -122.085749655962), zoom: 14.4746,);
+
   @override
   void initState() {
     super.initState();
     _checkUserParticipationStatus();
+    //eventLocation = LatLng(widget.event.lat, widget.event.lng);
   }
 
   Future<void> _checkUserParticipationStatus() async {
@@ -142,14 +152,30 @@ class _ImmersionDetailScreenState extends State<ImmersionDetailScreen> {
                       const BreadCrumbNavigationBarIcons(
                         title: "Immersion",
                         firstIcon: Icons.favorite_border_rounded,
-                        secondIcon: Icons.ios_share,
+                        firstIconOnPressed: null,
+                        secondIcon: Icons.play_circle_fill_rounded,
+                        secondIconOnPressed: null,
                       ),
                       Container(
                         height: 22,
                       ),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(widget.event.imageUrl),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.event.imageUrl,
+                          fit: BoxFit.cover,
+                          height: 170,
+                          width: double.infinity,
+                          placeholder: (context, url) => const Center(
+                            child: SizedBox(
+                              height: 60,
+                              width: 60,
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -262,7 +288,18 @@ class _ImmersionDetailScreenState extends State<ImmersionDetailScreen> {
                       const SizedBox(height: 20),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(
+                        child:
+
+                            /*GoogleMap(
+                          mapType: MapType.hybrid,
+                          initialCameraPosition: _kGooglePlex,
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller.complete(controller);
+                          },
+                        ),
+                        */
+
+                            Image.asset(
                           'assets/images/google_map_prop.png',
                           fit: BoxFit.cover,
                           height: 190,

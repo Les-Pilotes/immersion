@@ -89,6 +89,21 @@ class Event {
     return '$dayFull. $dayNumber $monthShort. $year';
   }
 
+  String get longFormattedDate {
+    final String dayNumber = eventDayNumber;
+    final String fullMonth = DateFormat.MMMM('fr_FR').format(eventDate);
+
+    return '${eventDayFull.capitalize()} $dayNumber $fullMonth';
+  }
+
+  String get longFormattedDateWithYear {
+    final String dayNumber = eventDayNumber;
+    final String fullMonth = DateFormat.MMMM('fr_FR').format(eventDate);
+    final String year = DateFormat.y('fr_FR').format(eventDate);
+
+    return '${eventDayFull.capitalize()} $dayNumber $fullMonth $year';
+  }
+
   Future<Duration> retrieveDuration() async {
     final DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('your_collection').doc('your_document').get();
 
