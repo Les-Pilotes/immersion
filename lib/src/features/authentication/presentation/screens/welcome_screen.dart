@@ -37,7 +37,7 @@ class WelcomeScreen extends StatelessWidget {
 
   void navigateToHome(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute<SignUpRegistrationScreen>(
+      MaterialPageRoute<HomeNavigationScreen>(
         builder: (context) => const HomeNavigationScreen(),
       ),
       (route) => false,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:immersion/src/features/immersion/presentation/screens/calendar_tabs/immersion_agenda_tab.dart';
 import 'package:immersion/src/features/immersion/presentation/screens/calendar_tabs/immersion_day_tab.dart';
 import 'package:immersion/src/features/immersion/presentation/screens/calendar_tabs/immersion_month_tab.dart';
 import 'package:immersion/src/utils/styles.dart';
@@ -29,9 +28,9 @@ class _EventCalendarTabBarState extends State<EventCalendarTabBar> {
                 children: const [
                   ImmersionMonthTab(),
                   ImmersionDayTab(),
-                  SingleChildScrollView(
+                  /*SingleChildScrollView(
                     child: ImmersionAgendaTab(),
-                  ),
+                  ),*/
                 ],
               ),
             ),

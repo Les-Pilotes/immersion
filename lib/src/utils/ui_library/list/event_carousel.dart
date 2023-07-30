@@ -18,6 +18,7 @@ class EventCarousel extends StatelessWidget {
       ),
     );
   }
+
   //endregion
 
   @override
@@ -69,6 +70,5 @@ class EventCarousel extends StatelessWidget {
         );
       },
     );
-
   }
 }

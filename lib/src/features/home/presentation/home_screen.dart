@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immersion/src/features/immersion/presentation/screens/calendar_tabs/immersion_agenda_tab.dart';
 import 'package:immersion/src/features/immersion/presentation/screens/immersion_calendar_screen.dart';
 import 'package:immersion/src/utils/constants.dart';
 import 'package:immersion/src/utils/styles.dart';
@@ -38,6 +39,14 @@ class HomeScreen extends StatelessWidget {
     );
   }
   */
+
+  void navigateToAgenda(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<ImmersionAgendaTab>(
+        builder: (context) => const ImmersionAgendaTab(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,8 +110,7 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   const PrimaryPageTitle(title: "Événements"),
                   TextButton(
-                    onPressed: () {},
-                    //=> navigateToEventCalendar(context),
+                    onPressed: () => navigateToAgenda(context),
                     child: const Text(
                       "Tout afficher",
                       style: TextStyle(

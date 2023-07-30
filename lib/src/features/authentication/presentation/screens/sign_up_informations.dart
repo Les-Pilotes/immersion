@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:immersion/src/features/user/data/current_user_cubit.dart';
 import 'package:immersion/src/features/authentication/domain/gender.dart';
 import 'package:immersion/src/features/authentication/domain/school_level.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_preferences.dart';
+import 'package:immersion/src/features/user/data/current_user_cubit.dart';
 import 'package:immersion/src/utils/styles.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
 import 'package:immersion/src/utils/ui_library/misc/number_circle.dart';
