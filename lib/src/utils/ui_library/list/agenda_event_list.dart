@@ -86,18 +86,31 @@ class AgendaEventList extends StatelessWidget {
                 itemCount: events.length,
                 itemBuilder: (context, index) {
                   final Event event = events[index];
-                  return AgendaEventTile(
-                    onPressed: () {
-                      navigateToEventDetails(context, event);
+                  return FutureBuilder<String>(
+                    future: event.eventNetworkUrl, // Assuming this returns the image URL
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return const Text('Error loading image');
+                      } else {
+                        event.imageUrl = snapshot.data ?? '';
+                        return AgendaEventTile(
+                          onPressed: () {
+                            navigateToEventDetails(context, event);
+                          },
+                          event: event,
+                          remaining: "(${event.daysRemaining})",
+                        );
+                      }
                     },
-                    event: event,
-                    remaining: "(${event.daysRemaining})",
                   );
                 },
               ),
             ],
           );
         }).toList();
+
 
         return CustomScrollView(
           slivers: [

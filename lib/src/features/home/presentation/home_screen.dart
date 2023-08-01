@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:immersion/src/features/authentication/data/firebase_constants.dart';
 import 'package:immersion/src/features/immersion/presentation/screens/calendar_tabs/immersion_agenda_tab.dart';
 import 'package:immersion/src/features/immersion/presentation/screens/immersion_calendar_screen.dart';
 import 'package:immersion/src/utils/constants.dart';
@@ -26,6 +28,17 @@ class HomeScreen extends StatelessWidget {
         builder: (context) => const ImmersionAgendaTab(),
       ),
     );
+  }
+
+  Future<int> getNumberOfUpcomingEvents() async {
+    final QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection(
+          FirebasePaths.eventPath,
+        )
+        .where('eventDate', isGreaterThanOrEqualTo: DateTime.now())
+        .get();
+
+    return snapshot.size;
   }
 
   @override
@@ -90,7 +103,20 @@ class HomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const PrimaryPageTitle(title: "À venir"),
+                  FutureBuilder(
+                    future: getNumberOfUpcomingEvents(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const PrimaryPageTitle(title: 'À venir');
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        final int numberOfUpcomingEvents = snapshot.data ?? 0;
+                        return PrimaryPageTitle(
+                            title: 'À venir ($numberOfUpcomingEvents)');
+                      }
+                    },
+                  ),
                   TextButton(
                     onPressed: () => navigateToAgenda(context),
                     child: const Text(

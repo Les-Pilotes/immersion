@@ -46,8 +46,7 @@ class _ImmersionDetailScreenState extends State<ImmersionDetailScreen> {
     final eventId = widget.event.id;
 
     try {
-      final isParticipant =
-          await FirebaseEventHelper().isUserParticipant(eventId);
+      final isParticipant = await EventHelper().isUserParticipant(eventId);
 
       setState(() {
         _isParticipant = isParticipant;
@@ -85,30 +84,36 @@ class _ImmersionDetailScreenState extends State<ImmersionDetailScreen> {
     );
   }
 
-  void _handleJoinEvent() {
+  Future<void> _handleParticipation() async {
     if (_isParticipant) {
-      try {
-        FirebaseEventHelper().removeParticipantFromEvent(
-          widget.event.id,
-          BlocProvider.of<CurrentUserCubit>(context).state.id,
-        );
-        leaveEventSuccess();
-      } on EventException catch (e) {
-        displayErrorMessage(e.message);
-      } catch (error) {
-        displayErrorMessage(error.toString());
+      final bool? confirmLeave = await showLeaveConfirmationDialog(context);
+      if (confirmLeave == true) {
+        try {
+          await EventHelper().removeParticipantFromEvent(
+            widget.event.id,
+            BlocProvider.of<CurrentUserCubit>(context).state.id,
+          );
+          leaveEventSuccess();
+        } on EventException catch (e) {
+          displayErrorMessage(e.message);
+        } catch (error) {
+          displayErrorMessage(error.toString());
+        }
       }
     } else {
-      try {
-        FirebaseEventHelper().addParticipantToEvent(
-          widget.event.id,
-          BlocProvider.of<CurrentUserCubit>(context).state.id,
-        );
-        joinEventSuccess();
-      } on EventException catch (e) {
-        displayErrorMessage(e.message);
-      } catch (error) {
-        displayErrorMessage(error.toString());
+      final bool? confirmJoin = await showJoinConfirmationDialog(context);
+      if (confirmJoin == true) {
+        try {
+          await EventHelper().addParticipantToEvent(
+            widget.event.id,
+            BlocProvider.of<CurrentUserCubit>(context).state.id,
+          );
+          joinEventSuccess();
+        } on EventException catch (e) {
+          displayErrorMessage(e.message);
+        } catch (error) {
+          displayErrorMessage(error.toString());
+        }
       }
     }
 
@@ -129,6 +134,62 @@ class _ImmersionDetailScreenState extends State<ImmersionDetailScreen> {
               child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<bool?> showJoinConfirmationDialog(BuildContext context) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmation'),
+          content: const Text('Êtes-vous sûr de vouloir rejoindre cette immersion ?'),
+          actions: [
+            TextButton(
+              child: const Text('Annuler'),
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(false); // Close the dialog and return false
+              },
+            ),
+            TextButton(
+              child: const Text('Confirmer'),
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(true); // Close the dialog and return true
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<bool?> showLeaveConfirmationDialog(BuildContext context) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmation'),
+          content: const Text('Êtes-vous sûr de vouloir quitter cette immersion ?'),
+          actions: [
+            TextButton(
+              child: const Text('Annuler'),
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(false); // Close the dialog and return false
+              },
+            ),
+            TextButton(
+              child: const Text('Confirmer'),
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(true); // Close the dialog and return true
               },
             ),
           ],
@@ -279,33 +340,41 @@ class _ImmersionDetailScreenState extends State<ImmersionDetailScreen> {
                       const SizedBox(height: 10),
                       Row(
                         children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on_rounded, size: 12),
-                              const SizedBox(width: 4),
-                              Text(
-                                widget.event.address,
-                                style: const TextStyle(
-                                  fontSize: 12,
+                          Expanded(
+                            flex: 3,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.location_on_rounded, size: 12),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    widget.event.address,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                    maxLines: 2,
+                                    // Set the maximum number of lines to display
+                                    overflow: TextOverflow
+                                        .ellipsis, // Show ellipsis (...) when text overflows
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          const SizedBox(
-                            width: 16,
-                            child: Text(" • "),
-                          ),
-                          Row(
-                            children: [
-                              const Icon(Icons.access_time, size: 12),
-                              const SizedBox(width: 4),
-                              Text(
-                                widget.event.eventTimeRange,
-                                style: const TextStyle(
-                                  fontSize: 12,
+                          Expanded(
+                            flex: 1,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.access_time, size: 12),
+                                const SizedBox(width: 4),
+                                Text(
+                                  widget.event.eventTimeRange,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -354,10 +423,11 @@ class _ImmersionDetailScreenState extends State<ImmersionDetailScreen> {
             ),
             Column(
               children: [
-                PrimaryButton(
-                  text: _isParticipant ? "Quitter" : "Rejoindre",
-                  onPressed: () => _handleJoinEvent(),
-                ),
+                if (widget.event.eventDate.isAfter(DateTime.now()))
+                  PrimaryButton(
+                    text: _isParticipant ? "Quitter" : "Rejoindre",
+                    onPressed: () => _handleParticipation(),
+                  ),
                 const SizedBox(height: 40),
               ],
             ),

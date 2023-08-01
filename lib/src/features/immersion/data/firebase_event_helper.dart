@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:immersion/src/features/authentication/data/firebase_constants.dart';
 
-class FirebaseEventHelper {
+class EventHelper {
   final CollectionReference eventsCollection = FirebaseInstances
       .firebaseFirestoreInstance
       .collection(FirebasePaths.eventPath);
