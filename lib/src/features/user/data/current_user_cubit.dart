@@ -4,7 +4,7 @@ import 'package:immersion/src/features/authentication/data/firebase_constants.da
 import 'package:immersion/src/features/authentication/data/firebase_registration_helper.dart';
 import 'package:immersion/src/features/authentication/domain/gender.dart';
 import 'package:immersion/src/features/authentication/domain/school_level.dart';
-import 'package:immersion/src/features/authentication/domain/student_user_model.dart';
+import 'package:immersion/src/features/user/domain/student_user_model.dart';
 
 class CurrentUserCubit extends Cubit<StudentUser> {
   CurrentUserCubit()

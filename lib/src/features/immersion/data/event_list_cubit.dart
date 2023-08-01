@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immersion/src/features/authentication/data/firebase_constants.dart';
-import 'package:immersion/src/features/authentication/domain/student_user_model.dart';
 import 'package:immersion/src/features/immersion/domain/event_model.dart';
+import 'package:immersion/src/features/user/domain/student_user_model.dart';
 
 class EventListCubit extends Cubit<List<Event>> {
   EventListCubit() : super([]);

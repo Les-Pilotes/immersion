@@ -6,14 +6,19 @@ class AgendaEventTile extends StatelessWidget {
   const AgendaEventTile({
     required this.onPressed,
     required this.event,
+    this.remaining,
     super.key,
   });
 
   final VoidCallback onPressed;
   final Event event;
+  final String? remaining;
 
   @override
   Widget build(BuildContext context) {
+    final bool isFutureEvent = event.eventDate.isAfter(DateTime.now());
+    final bool showRemaining = isFutureEvent && remaining != null;
+
     return GestureDetector(
       onTap: () => onPressed(),
       child: Card(
@@ -42,21 +47,34 @@ class AgendaEventTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        event.title,
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            event.title,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          if (showRemaining)
+                            Text(
+                              ' $remaining',
+                              style: const TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                        ],
                       ),
                       Row(
                         children: [
-                          Text(event.formattedDate),
-                          const Text(" • "),
                           Text(event.eventTimeRange),
                         ],
                       ),
-                      Text(event.organizerName),
+                      Text("par ${event.organizerName}", style:
+                        TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey.shade500,
+                        ),),
                     ],
                   ),
                 )

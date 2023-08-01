@@ -9,6 +9,7 @@ class BreadCrumbNavigationBarIcons extends StatelessWidget {
     required this.firstIconOnPressed,
     required this.secondIcon,
     required this.secondIconOnPressed,
+    this.participantStream,
     super.key,
   });
 
@@ -17,6 +18,7 @@ class BreadCrumbNavigationBarIcons extends StatelessWidget {
   final VoidCallback? firstIconOnPressed;
   final IconData secondIcon;
   final VoidCallback? secondIconOnPressed;
+  final Stream<List<String>>? participantStream;
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +40,49 @@ class BreadCrumbNavigationBarIcons extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
-                    firstIcon,
-                    size: 25,
-                    color: primaryColor,
+                  StreamBuilder<List<String>>(
+                    stream: participantStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      }
+
+                      final count = snapshot.data?.length ?? 0;
+
+                      return IconButton(
+                        icon: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Icon(
+                              firstIcon,
+                              size: 25,
+                            ),
+                            if (count > 0)
+                              Positioned(
+                                bottom: 8,
+                                left: 10,
+                                child: Container(
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Text(
+                                    count.toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        onPressed: firstIconOnPressed,
+                        color: primaryColor,
+                      );
+                    },
                   ),
                   const SizedBox(width: 20),
                   Icon(

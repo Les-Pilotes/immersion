@@ -26,6 +26,7 @@ class AgendaEventList extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseInstances.firebaseFirestoreInstance
           .collection(FirebasePaths.eventPath)
+          .orderBy('eventDate', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -42,8 +43,16 @@ class AgendaEventList extends StatelessWidget {
 
         for (final document in documents) {
           final Event event = Event.fromDocumentSnapshot(document);
-          final String formattedDate = event
-              .longFormattedDateWithYear;
+          String formattedDate;
+
+          final DateTime currentDate = DateTime.now();
+          final DateTime eventDate = event.eventDate;
+
+          if (currentDate.year == eventDate.year) {
+            formattedDate = event.longFormattedDate;
+          } else {
+            formattedDate = event.longFormattedDateWithYear;
+          }
 
           if (!eventsByDate.containsKey(formattedDate)) {
             eventsByDate[formattedDate] = [];
@@ -82,6 +91,7 @@ class AgendaEventList extends StatelessWidget {
                       navigateToEventDetails(context, event);
                     },
                     event: event,
+                    remaining: "(${event.daysRemaining})",
                   );
                 },
               ),

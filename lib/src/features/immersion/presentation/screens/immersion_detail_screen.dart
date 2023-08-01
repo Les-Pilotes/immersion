@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:immersion/src/features/immersion/data/firebase_event_helper.dart';
 import 'package:immersion/src/features/immersion/domain/event_model.dart';
+import 'package:immersion/src/features/immersion/presentation/screens/immersion_participant_screen.dart';
 import 'package:immersion/src/features/user/data/current_user_cubit.dart';
 import 'package:immersion/src/utils/constants.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
@@ -56,6 +58,8 @@ class _ImmersionDetailScreenState extends State<ImmersionDetailScreen> {
       displayErrorMessage(error.toString());
     }
   }
+
+  // TODO(amadoug2g): move to a dedicated event action class
 
   void joinEventSuccess() {
     Fluttertoast.showToast(
@@ -133,8 +137,43 @@ class _ImmersionDetailScreenState extends State<ImmersionDetailScreen> {
     );
   }
 
+  void navigateToParticipants(BuildContext context, String eventId) {
+    Navigator.of(context).push(
+      MaterialPageRoute<ImmersionParticipantScreen>(
+        builder: (context) => ImmersionParticipantScreen(
+          eventId: eventId,
+        ),
+      ),
+    );
+  }
+
+  Stream<List<String>> getParticipantCountStream(String eventId) {
+    final CollectionReference participantsCollection = FirebaseFirestore
+        .instance
+        .collection('Env/Staging/Event/$eventId/Participants');
+
+    return participantsCollection.snapshots().map((snapshot) {
+      final List<String> participantIds =
+          snapshot.docs.map((doc) => doc.id).toList();
+      return participantIds;
+    });
+  }
+
+  /*
+  Future<void> _launchYouTubeVideo(String videoUrl) async {
+    if (await canLaunchUrl(Uri.parse(videoUrl))) {
+      await launchUrl(Uri.parse(videoUrl));
+    } else {
+      debugPrint("Could not launch the video URL");
+    }
+  }
+  */
+
   @override
   Widget build(BuildContext context) {
+    final Stream<List<String>> participantCountStream =
+        getParticipantCountStream(widget.event.id);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -149,12 +188,14 @@ class _ImmersionDetailScreenState extends State<ImmersionDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const BreadCrumbNavigationBarIcons(
+                      BreadCrumbNavigationBarIcons(
                         title: "Immersion",
-                        firstIcon: Icons.favorite_border_rounded,
-                        firstIconOnPressed: null,
+                        firstIcon: Icons.people_rounded,
+                        firstIconOnPressed: () =>
+                            navigateToParticipants(context, widget.event.id),
                         secondIcon: Icons.play_circle_fill_rounded,
                         secondIconOnPressed: null,
+                        participantStream: participantCountStream,
                       ),
                       Container(
                         height: 22,

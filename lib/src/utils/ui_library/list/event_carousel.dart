@@ -26,6 +26,11 @@ class EventCarousel extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseInstances.firebaseFirestoreInstance
           .collection(FirebasePaths.eventPath)
+          .where(
+            'eventDate',
+            isGreaterThan: DateTime.now().subtract(const Duration(days: 1)),
+          )
+          .orderBy('eventDate')
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {

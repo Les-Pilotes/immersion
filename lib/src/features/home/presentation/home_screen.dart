@@ -90,7 +90,7 @@ class HomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const PrimaryPageTitle(title: "Événements"),
+                  const PrimaryPageTitle(title: "À venir"),
                   TextButton(
                     onPressed: () => navigateToAgenda(context),
                     child: const Text(

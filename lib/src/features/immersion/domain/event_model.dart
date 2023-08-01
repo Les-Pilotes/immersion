@@ -104,6 +104,14 @@ class Event {
     return '${eventDayFull.capitalize()} $dayNumber $fullMonth $year';
   }
 
+  String get daysRemaining {
+    final DateTime currentDate = DateTime.now();
+    final Duration difference = eventDate.difference(currentDate);
+    final int days = difference.inDays;
+    final String daySuffix = days == 1 ? 'jour' : 'jours';
+    return 'J - $days $daySuffix';
+  }
+
   Future<Duration> retrieveDuration() async {
     final DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('your_collection').doc('your_document').get();
 

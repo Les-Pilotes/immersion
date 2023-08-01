@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immersion/src/features/authentication/data/firebase_constants.dart';
-import 'package:immersion/src/features/authentication/domain/student_user_model.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:immersion/src/features/authentication/presentation/screens/sign_up_registration.dart';
 import 'package:immersion/src/features/home/presentation/home_navigation_screen.dart';
 import 'package:immersion/src/features/user/data/current_user_cubit.dart';
+import 'package:immersion/src/features/user/domain/student_user_model.dart';
 import 'package:immersion/src/utils/constants.dart';
 import 'package:immersion/src/utils/styles.dart';
 import 'package:immersion/src/utils/ui_library/button/primary_button.dart';
